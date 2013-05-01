@@ -4,6 +4,10 @@ body {
     color: white;
 }
 
+#page {
+    margin: 0 auto;
+}
+
 #index_page td {
     /*background: #6f6f6f;*/
     background: #414141;
@@ -11,10 +15,6 @@ body {
     border-radius: 5px 5px 5px 5px;
     color: black;
     overflow: hidden;
-}
-
-#index_page table {
-    margin: 0 auto;
 }
 
 #index_page td a{

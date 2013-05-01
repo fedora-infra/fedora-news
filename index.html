@@ -2,54 +2,60 @@
 <html>
 <head>
     <title>Fedora news apps</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/main.css"
+      type="text/css" media="Screen"/>
+    <link rel="stylesheet" href="css/mobile.css"
+      type="text/css" media="handheld" />
 </head>
 <body>
-  <section id="index_page">
-    <table>
-      <tr>
-        <td>
-          <a id="home_planet" href="#">
-            <img src="img/planet.png" alt="Fedora Planet" />
-          </a>
-        </td>
-        <td>
-          <a id="home_updates" href="#">
-            <img src="img/updates.png" alt="Latest updates" />
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <a id="home_builds" href="#">
-            <img src="img/builds.png" alt="Latest builds" />
-          </a>
-        </td>
-        <td>
-          <a id="home_meetings" href="#">
-            <img src="img/meetings.png" alt="Coming meetings" />
-          </a>
-        </td>
-      </tr>
-    </table>
+  <section id="page">
+    <section id="index_page">
+      <table>
+        <tr>
+          <td>
+            <a id="home_planet" href="#">
+              <img src="img/planet.png" alt="Fedora Planet" />
+            </a>
+          </td>
+          <td>
+            <a id="home_updates" href="#">
+              <img src="img/updates.png" alt="Latest updates" />
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="home_builds" href="#">
+              <img src="img/builds.png" alt="Latest builds" />
+            </a>
+          </td>
+          <td>
+            <a id="home_meetings" href="#">
+              <img src="img/meetings.png" alt="Coming meetings" />
+            </a>
+          </td>
+        </tr>
+      </table>
+    </section>
+    <section id="planet_page">
+      <span class="menu">
+        <a class="home_button" href='#'>
+          <img src="img/back.png" alt="Home" />
+        </a>
+        <h3>Fedora Planet</h3>
+      </span>
+    </section>
+    <section id="updates_page">
+      
+    </section>
+    <section id="builds_page">
+      
+    </section>
+    <section id="meetings_page">
+      
+    </section>
   </section>
-  <section id="planet_page">
-    <span class="menu">
-      <a class="home_button" href='#'>
-        <img src="img/back.png" alt="Home" />
-      </a>
-      <h3>Fedora Planet</h3>
-    </span>
-  </section>
-  <section id="updates_page">
-    
-  </section>
-  <section id="builds_page">
-    
-  </section>
-  <section id="meetings_page">
-    
-  </section>
+
   <script src="js/jquery.min.js"></script>
   <script type="text/javascript" language="Javascript">
 
