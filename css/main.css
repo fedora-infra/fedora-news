@@ -1,6 +1,5 @@
 body {
 		background: #002b36;
-		width: 250px;
 		margin: auto;
 		color: white;
 }
@@ -11,15 +10,13 @@ body {
 		border: 1px solid #CCCCCC;
 	    border-radius: 5px 5px 5px 5px;
 		color: black;
-	    /*display: block;*/
-	    margin: 1em auto;
 	    overflow: hidden;
-	    padding: 2em;
 }
 
 #index_page td a{
 	    margin: 1em auto;
 		padding: 2em;
+	    display: inline-block;
 }
 
 
