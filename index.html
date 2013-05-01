@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="css/mobile.css"
       type="text/css" media="handheld" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.mobile-1.3.1.min.js"></script>
+    <link rel="apple-touch-icon" href="img/Fedora.png"/>
 </head>
 <body>
-  <section id="page">
-    <section id="index_page">
+    <div id="index_page" data-role="page">
       <table>
         <tr>
           <td>
-            <a id="home_planet" href="#">
+            <a id="home_planet" href="#home_planet">
               <img src="img/planet.png" alt="Fedora Planet" />
             </a>
           </td>
@@ -37,27 +39,39 @@
           </td>
         </tr>
       </table>
-    </section>
-    <section id="planet_page">
-      <span class="menu">
+    </div>
+
+    <section id="planet_page" data-role="page">
+      <div data-role="header">
         <a class="home_button" href='#'>
           <img src="img/back.png" alt="Home" />
         </a>
-        <h3>Fedora Planet</h3>
-      </span>
+        <h1>Fedora Planet</h1>
+      </div><!-- /header -->
+      <div data-role="content">
+      </div>
     </section>
-    <section id="updates_page">
-      
-    </section>
-    <section id="builds_page">
-      
-    </section>
-    <section id="meetings_page">
-      
-    </section>
-  </section>
 
-  <script src="js/jquery.min.js"></script>
+    <section id="updates_page" data-role="page"
+      <div data-role="header">
+          <a class="home_button" href='#'>
+            <img src="img/back.png" alt="Home" />
+          </a>
+          <h1>Latest updates</h1>
+      </div><!-- /header -->
+
+      <div data-role="content">
+        <p>Page content goes here.</p>
+      </div><!-- /content -->
+
+    </section>
+    <section id="builds_page" data-role="page">
+      
+    </section>
+    <section id="meetings_page" data-role="page">
+      
+    </section>
+
   <script type="text/javascript" language="Javascript">
 
 function show_index(){
