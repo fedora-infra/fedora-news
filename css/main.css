@@ -1,22 +1,26 @@
 body {
-		background: #002b36;
-		margin: auto;
-		color: white;
+    background: #002b36;
+    margin: auto;
+    color: white;
 }
 
 #index_page td {
-		/*background: #6f6f6f;*/
-		background: #414141;
-		border: 1px solid #CCCCCC;
-	    border-radius: 5px 5px 5px 5px;
-		color: black;
-	    overflow: hidden;
+    /*background: #6f6f6f;*/
+    background: #414141;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    color: black;
+    overflow: hidden;
+}
+
+#index_page table {
+    margin: 0 auto;
 }
 
 #index_page td a{
-	    margin: 1em auto;
-		padding: 2em;
-	    display: inline-block;
+    margin: 1em auto;
+    padding: 2em;
+    display: inline-block;
 }
 
 
