@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="1064"
+   height="428"
+   id="svg2439"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="text.svg"
+   inkscape:export-filename="/home/duffy/Documents/Fedora/Fedora Logo Packs - 10 Nov 2010/fedora-logos/fedora sublogos/fedora_applicaton.png"
+   inkscape:export-xdpi="17.487659"
+   inkscape:export-ydpi="17.487659">
+  <metadata
+     id="metadata23">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="709"
+     id="namedview21"
+     showgrid="false"
+     inkscape:zoom="0.55918075"
+     inkscape:cx="318.25589"
+     inkscape:cy="17.009889"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2439"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs2441" />
+  <path
+     d="m -46.496593,1.7883305 1063.999993,0 0,427.9999995 -1063.999993,0 0,-427.9999995 z"
+     id="rect2828"
+     style="fill:#4d4d4d;fill-opacity:1"
+     inkscape:connector-curvature="0" />
+  <text
+     x="91.917343"
+     y="286.28598"
+     id="text4112"
+     xml:space="preserve"
+     style="font-size:168.32580566px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+     inkscape:export-filename="/home/pierrey/Desktop/meetings.png"
+     inkscape:export-xdpi="20.799999"
+     inkscape:export-ydpi="20.799999"><tspan
+       x="91.917343"
+       y="286.28598"
+       id="tspan4114"
+       style="font-size:100px;fill:#ffffff;fill-opacity:1;font-family:Comfortaa;-inkscape-font-specification:Comfortaa">meetings</tspan></text>
+</svg>

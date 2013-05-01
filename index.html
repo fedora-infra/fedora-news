@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Fedora news apps</title>
+    <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+  <span id="index_page">
+    <table>
+      <tr>
+        <td>
+          <a id="home_planet" href="#">
+            <img src="planet.png" alt="Fedora Planet" />
+          </a>
+        </td>
+        <td>
+          <a id="home_updates" href="#">
+            <img src="updates.png" alt="Latest updates" />
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <a id="home_builds" href="#">
+            <img src="builds.png" alt="Latest builds" />
+          </a>
+        </td>
+        <td>
+          <a id="home_meetings" href="#">
+            <img src="meetings.png" alt="Coming meetings" />
+          </a>
+        </td>
+      </tr>
+    </table>
+  </span>
+  <span id="planet_page">
+    <span class="menu">
+      <a class="home_button" href='#'>
+        <img src="back.png" alt="Home" />
+      </a>
+      <h3>Fedora Planet</h3>
+    </span>
+  </span>
+  <span id="updates_page">
+    
+  </span>
+  <span id="builds_page">
+    
+  </span>
+  <span id="meetings_page">
+    
+  </span>
+  <script src="jquery.min.js"></script>
+  <script type="text/javascript" language="Javascript">
+
+function show_index(){
+  $('#planet_page').hide();
+  $('#updates_page').hide();
+  $('#builds_page').hide();
+  $('#meetings_page').hide();
+  $('#index_page').show();
+}
+
+$(document).ready(function () {
+  show_index();
+
+  $('.home_button').bind("click", function () {
+    show_index();
+  }
+
+  $('#home_planet').bind("click", function () {
+    $('#index_page').hide();
+    $('#planet_page').show();
+  });
+
+  $('#home_updates').bind("click", function () {
+      $('#index_page').hide();
+      $('#updates_page').show();
+  });
+}); 
+</script>
+</body>
+</html> 
