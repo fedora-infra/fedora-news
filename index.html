@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Fedora news apps</title>
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
   <span id="index_page">
@@ -10,24 +10,24 @@
       <tr>
         <td>
           <a id="home_planet" href="#">
-            <img src="planet.png" alt="Fedora Planet" />
+            <img src="img/planet.png" alt="Fedora Planet" />
           </a>
         </td>
         <td>
           <a id="home_updates" href="#">
-            <img src="updates.png" alt="Latest updates" />
+            <img src="img/updates.png" alt="Latest updates" />
           </a>
         </td>
       </tr>
       <tr>
         <td>
           <a id="home_builds" href="#">
-            <img src="builds.png" alt="Latest builds" />
+            <img src="img/builds.png" alt="Latest builds" />
           </a>
         </td>
         <td>
           <a id="home_meetings" href="#">
-            <img src="meetings.png" alt="Coming meetings" />
+            <img src="img/meetings.png" alt="Coming meetings" />
           </a>
         </td>
       </tr>
@@ -36,7 +36,7 @@
   <span id="planet_page">
     <span class="menu">
       <a class="home_button" href='#'>
-        <img src="back.png" alt="Home" />
+        <img src="img/back.png" alt="Home" />
       </a>
       <h3>Fedora Planet</h3>
     </span>
@@ -50,7 +50,7 @@
   <span id="meetings_page">
     
   </span>
-  <script src="jquery.min.js"></script>
+  <script src="js/jquery.min.js"></script>
   <script type="text/javascript" language="Javascript">
 
 function show_index(){
@@ -66,7 +66,7 @@ $(document).ready(function () {
 
   $('.home_button').bind("click", function () {
     show_index();
-  }
+  });
 
   $('#home_planet').bind("click", function () {
     $('#index_page').hide();
