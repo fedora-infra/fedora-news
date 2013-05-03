@@ -1,7 +1,13 @@
-body {
+body, .ui-overlay-c {
     background: #002b36;
     margin: auto;
     color: white;
+}
+
+.ui-body-c {
+    background: none;
+    color: white;
+    text-shadow: none;
 }
 
 #page {
