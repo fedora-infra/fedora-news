@@ -42,12 +42,18 @@ function load_planet_entries(entries){
 
 
 function load_planet() {
+    $("#content_planet").html('');
     entries = localStorage.planet_entries ? localStorage.planet_entries : [];
     entries = eval(entries);
-    load_planet_entries(entries);
+    if (entries == null) {
+        update_planet()
+    } else {
+        load_planet_entries(entries);
+    }
 }
 
 function update_planet() {
+    $("#message_planet").text('Retrieving posts from the planet');
     var articles = [ ];
     var rss_feed = 'http://planet.fedoraproject.org/atom.xml';
 
@@ -61,4 +67,5 @@ function update_planet() {
         localStorage.planet_entries = JSON.stringify(entries);
         load_planet_entries(entries);
     });
+    $("#message_planet").text('');
 }
