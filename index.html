@@ -14,9 +14,18 @@
     <script type="text/javascript">
       $(function () {
         $('#refresh_planet').bind("click", function () {
-          console.log('refresh_planet clicked');
           update_planet();
         });
+        $('#clear_planet').bind("click", function () {
+          $("#content_planet").html('');
+          localStorage.planet_entries = null;
+        });
+      });
+      $(document).on("pagechange", function () {
+        var page_id = $.mobile.activePage.attr("id");
+        if (page_id == 'planet_page') {
+          load_planet();
+        }
       });
     </script>
 
