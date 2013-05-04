@@ -58,7 +58,6 @@ function update_planet() {
     var rss_feed = 'http://planet.fedoraproject.org/atom.xml';
 
     $("#content_planet").html('');
-    $("#content_planet").empty();
 
     get_rss(rss_feed, function(data) {
         if(data == null)
