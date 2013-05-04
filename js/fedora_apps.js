@@ -48,6 +48,7 @@ function load_planet() {
     if (entries == null) {
         update_planet()
     } else {
+        $("#message_planet").text('Cached posts from the planet');
         load_planet_entries(entries);
     }
 }
@@ -65,6 +66,6 @@ function update_planet() {
         var entries = data.responseData.feed.entries.map( function(el) { return parseEntry(el); });
         localStorage.planet_entries = JSON.stringify(entries);
         load_planet_entries(entries);
+        $("#message_planet").text('');
     });
-    $("#message_planet").text('');
 }
