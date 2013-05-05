@@ -61,8 +61,10 @@ function update_planet() {
     $("#content_planet").html('');
 
     get_rss(rss_feed, function(data) {
-        if(data == null)
+        if (data == null) {
+            $("#message_planet").text('Could not retrieve anything from the planet');
             return;
+        }
         var entries = data.responseData.feed.entries.map( function(el) { return parseEntry(el); });
         localStorage.planet_entries = JSON.stringify(entries);
         load_planet_entries(entries);
