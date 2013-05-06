@@ -13,18 +13,51 @@
     <script src="js/fedora_apps.js" type="text/javascript"></script>
     <script type="text/javascript">
       $(function () {
+        /* Refresh buttons */
         $('#refresh_planet').bind("click", function () {
           update_planet();
         });
+        $('#refresh_updates').bind("click", function () {
+          console.log('refresh updates');
+        });
+        $('#refresh_builds').bind("click", function () {
+          console.log('refresh builds');
+        });
+        $('#refresh_meetings').bind("click", function () {
+          console.log('refresh meetings');
+        });
+        
+
+        /* Clear buttons */
         $('#clear_planet').bind("click", function () {
           $("#content_planet").html('');
           localStorage.planet_entries = null;
         });
+        $('#clear_updates').bind("click", function () {
+          $("#content_updates").html('');
+          localStorage.updates_entries = null;
+        });
+        $('#clear_builds').bind("click", function () {
+          $("#content_build").html('');
+          localStorage.builds_entries = null;
+        });
+        $('#clear_meetings').bind("click", function () {
+          $("#content_meetings").html('');
+          localStorage.meeting_entries = null;
+        });
       });
+
+      /* Load content of page change */
       $(document).on("pagechange", function () {
         var page_id = $.mobile.activePage.attr("id");
         if (page_id == 'planet_page') {
           load_planet();
+        } else if (page_id == 'updates_page') {
+          console.log('load updates');
+        } else if (page_id == 'builds_page') {
+          console.log('load builds');
+        } else if (page_id == 'meetings_page') {
+          console.log('load meetings');
         }
       });
     </script>
@@ -72,7 +105,7 @@
         <h1>Fedora Planet</h1>
       </div><!-- /header -->
       <div data-role="content">
-        <p id="message_planet"></p>
+        <p id="message_planet">Check out the last 10 blog posts of the planet</p>
         <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_planet">
         </div>
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_planet'>clear</a>
@@ -87,7 +120,9 @@
       </div><!-- /header -->
 
       <div data-role="content">
-        <p>Check out the 10 latest updates</p>
+        <p id="message_updates">Check out the 10 latest updates</p>
+        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_updates">
+        </div>
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_updates'>clear</a>
       </div><!-- /content -->
     </section>
@@ -100,7 +135,10 @@
       </div><!-- /header -->
 
       <div data-role="content">
-        <p>Check out the 10 latest builds</p>
+        <p id="message_builds">Check out the 10 latest builds</p>
+        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_builds">
+        </div>
+        <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_builds'>clear</a>
       </div><!-- /content -->
     </section>
 
@@ -112,7 +150,10 @@
       </div><!-- /header -->
 
       <div data-role="content">
-        <p>Check out the 10 coming meetings</p>
+        <p id="message_meetings">Check out the 10 coming meetings</p>
+        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_meetings">
+        </div>
+        <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_meetings'>clear</a>
       </div><!-- /content -->
  
     </section>
