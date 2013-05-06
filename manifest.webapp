@@ -1,0 +1,14 @@
+{
+  "name": "Fedora-news",
+  "description": "Fedora news is a central place to follow what's going on in the Fedora community",
+  "launch_path": "/fedora-news/",
+  "icons": {
+    "128": "fedora-news/img/Fedora-128.png"
+  },
+  "developer": {
+    "name": "Pierre-Yves Chibon",
+    "url": "http://github.com/pypingou/fedora-news"
+  },
+  "default_locale": "en",
+  "fullscreen": "true"
+}
