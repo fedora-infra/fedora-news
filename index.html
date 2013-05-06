@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Fedora news apps</title>
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon"
+      href="//fedoraproject.org/static/images/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="apple-touch-icon" href="img/Fedora.png"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/git/jquery.mobile-git.css" type="text/css"> 
@@ -28,6 +30,7 @@
         });
         $('#refresh_all').bind("click", function () {
           update_planet(false);
+          $("#message_home").text('Cache refreshed');
         });
         
 
@@ -69,6 +72,7 @@
 
       /* Load content of page change */
       $(document).on("pagechange", function () {
+        $("#message_home").text('');
         var page_id = $.mobile.activePage.attr("id");
         if (page_id == 'planet_page') {
           load_planet();
@@ -89,6 +93,7 @@
         <h1>Fedora News</h1>
       </div><!-- /header -->
       <div data-role="content">
+        <p id="message_home"></p>
       <table>
         <tr>
           <td>
