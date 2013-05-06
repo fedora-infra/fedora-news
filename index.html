@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Fedora news apps</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="apple-touch-icon" href="img/Fedora.png"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/git/jquery.mobile-git.css" type="text/css"> 
     <link rel="stylesheet" href="css/main.css" type="text/css"/>
@@ -26,25 +26,45 @@
         $('#refresh_meetings').bind("click", function () {
           console.log('refresh meetings');
         });
+        $('#refresh_all').bind("click", function () {
+          update_planet(false);
+        });
         
 
         /* Clear buttons */
         $('#clear_planet').bind("click", function () {
           $("#content_planet").html('');
           localStorage.planet_entries = null;
+          $("#message_planet").text('Cache cleared');
         });
         $('#clear_updates').bind("click", function () {
           $("#content_updates").html('');
           localStorage.updates_entries = null;
+          $("#message_updates").text('Cache cleared');
         });
         $('#clear_builds').bind("click", function () {
           $("#content_build").html('');
           localStorage.builds_entries = null;
+          $("#message_builds").text('Cache cleared');
         });
         $('#clear_meetings').bind("click", function () {
           $("#content_meetings").html('');
           localStorage.meeting_entries = null;
+          $("#message_meetings").text('Cache cleared');
         });
+
+        if (navigator.mozApps) {
+          var request = navigator.mozApps.getSelf();
+          request.onsuccess = function() {
+            if (!this.result) {
+              console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
+              request = navigator.mozApps.install(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
+              request.onerror = function() {
+                console.log("Install failed: " + this.error.name);
+              };
+            }
+          };
+        }
       });
 
       /* Load content of page change */
@@ -95,6 +115,7 @@
           </td>
         </tr>
       </table>
+      <a data-role="button" data-theme="c" data-icon="refresh" href='#' id='refresh_all'>Refresh all</a>
     </div>
     </section>
 
