@@ -81,7 +81,7 @@ function load_planet() {
 }
 
 function update_planet() {
-    $("#message_planet").text('Retrieving posts from the planet');
+    $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
     var articles = [ ];
     var rss_feed = 'http://planet.fedoraproject.org/atom.xml';
 

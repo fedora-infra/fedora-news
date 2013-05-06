@@ -29,4 +29,11 @@ body, .ui-overlay-c {
     display: inline-block;
 }
 
-
+.loading {
+    background-image: url('../img/loading.gif');
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 25px 25px;
+    padding-right: 40px;
+    padding-bottom: 15px;
+}
