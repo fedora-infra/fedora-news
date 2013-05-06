@@ -80,8 +80,11 @@ function load_planet() {
     }
 }
 
-function update_planet() {
-    $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
+function update_planet(deploy) {
+    if(typeof(deploy)==='undefined') deploy = true;
+    if (deploy == true) {
+        $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
+    }
     var articles = [ ];
     var rss_feed = 'http://planet.fedoraproject.org/atom.xml';
 
@@ -94,7 +97,9 @@ function update_planet() {
         }
         var entries = data.responseData.feed.entries.map( function(el) { return parseEntry(el); });
         localStorage.planet_entries = JSON.stringify(entries);
-        load_planet_entries(entries);
-        $("#message_planet").text('');
+        if (deploy == true) {
+            load_planet_entries(entries);
+            $("#message_planet").text('');
+        }
     });
 }
