@@ -34,11 +34,15 @@
           console.log('refresh packages');
           update_fedmsg("packages", "pkgdb");
         });
+
         $('#refresh_all').bind("click", function () {
           update_planet(false);
+          update_fedmsg("updates", "bodhi");
+          update_fedmsg("builds", "koji");
+          update_fedmsg("packages", "pkgdb");
           $("#message_home").text('Cache refreshed');
         });
-        
+
 
         /* Clear buttons */
         $('#clear_planet').bind("click", function () {
@@ -65,6 +69,14 @@
           $("#content_builds").html('');
           localStorage.setItem('builds', null);
           $("#message_builds").text('Cache cleared');
+        });
+
+        $('#clear_all').bind("click", function () {
+          localStorage.planet_entries = null;
+          localStorage.setItem('updates', null);
+          localStorage.setItem('packages', null);
+          localStorage.setItem('builds', null);
+          $("#message_home").text('Cache clear');
         });
 
         if (navigator.mozApps) {
@@ -146,6 +158,7 @@
         </tr>
       </table>
       <a data-role="button" data-theme="c" data-icon="refresh" href='#' id='refresh_all'>Refresh all</a>
+      <a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
     </div>
     </section>
 
