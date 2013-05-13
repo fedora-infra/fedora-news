@@ -37,9 +37,9 @@
 
         $('#refresh_all').bind("click", function () {
           update_planet(false);
-          update_fedmsg("updates", "bodhi");
-          update_fedmsg("builds", "koji");
-          update_fedmsg("packages", "pkgdb");
+          update_fedmsg("updates", "bodhi", false);
+          update_fedmsg("builds", "koji", false);
+          update_fedmsg("packages", "pkgdb", false);
           $("#message_home").text('Cache refreshed');
         });
 
