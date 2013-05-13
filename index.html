@@ -21,12 +21,18 @@
         });
         $('#refresh_updates').bind("click", function () {
           console.log('refresh updates');
+          update_fedmsg("updates", "bodhi");
         });
         $('#refresh_builds').bind("click", function () {
           console.log('refresh builds');
+          update_fedmsg("builds", "koji");
         });
         $('#refresh_meetings').bind("click", function () {
           console.log('refresh meetings');
+        });
+        $('#refresh_packages').bind("click", function () {
+          console.log('refresh packages');
+          update_fedmsg("packages", "pkgdb");
         });
         $('#refresh_all').bind("click", function () {
           update_planet(false);
@@ -42,18 +48,23 @@
         });
         $('#clear_updates').bind("click", function () {
           $("#content_updates").html('');
-          localStorage.updates_entries = null;
+          localStorage.setItem('updates', null);
           $("#message_updates").text('Cache cleared');
         });
-        $('#clear_builds').bind("click", function () {
-          $("#content_build").html('');
-          localStorage.builds_entries = null;
-          $("#message_builds").text('Cache cleared');
+        $('#clear_packages').bind("click", function () {
+          $("#content_packages").html('');
+          localStorage.setItem('packages', null);
+          $("#message_packages").text('Cache cleared');
         });
         $('#clear_meetings').bind("click", function () {
           $("#content_meetings").html('');
           localStorage.meeting_entries = null;
           $("#message_meetings").text('Cache cleared');
+        });
+        $('#clear_builds').bind("click", function () {
+          $("#content_builds").html('');
+          localStorage.setItem('builds', null);
+          $("#message_builds").text('Cache cleared');
         });
 
         if (navigator.mozApps) {
@@ -78,8 +89,13 @@
           load_planet();
         } else if (page_id == 'updates_page') {
           console.log('load updates');
+          load_fedmsg('updates', 'bodhi');
         } else if (page_id == 'builds_page') {
           console.log('load builds');
+          load_fedmsg('builds', 'koji');
+        } else if (page_id == 'packages_page') {
+          console.log('load packages');
+          load_fedmsg('packages', 'pkgdb');
         } else if (page_id == 'meetings_page') {
           console.log('load meetings');
         }
@@ -109,14 +125,23 @@
         </tr>
         <tr>
           <td>
-            <a id="home_builds" href="#builds_page">
-              <img src="img/builds.png" alt="Latest builds" />
+            <a id="home_builds" href="#packages_page">
+              <img src="img/packages.png" alt="Latest packages" />
             </a>
           </td>
           <td>
             <a id="home_meetings" href="#meetings_page">
               <img src="img/meetings.png" alt="Coming meetings" />
             </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="home_builds" href="#builds_page">
+              <img src="img/builds.png" alt="Latest builds" />
+            </a>
+          </td>
+          <td>
           </td>
         </tr>
       </table>
@@ -131,7 +156,7 @@
         <h1>Fedora Planet</h1>
       </div><!-- /header -->
       <div data-role="content">
-        <p id="message_planet">Check out the last 10 blog posts of the planet</p>
+        <p id="message_planet">Check the latest posts of the planet</p>
         <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_planet">
         </div>
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_planet'>clear</a>
@@ -146,25 +171,25 @@
       </div><!-- /header -->
 
       <div data-role="content">
-        <p id="message_updates">Check out the 10 latest updates</p>
-        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_updates">
-        </div>
+        <p id="message_updates">Check the latest updates information</p>
+        <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_updates">
+        </ul>
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_updates'>clear</a>
       </div><!-- /content -->
     </section>
 
-    <section id="builds_page" data-role="page">
+    <section id="packages_page" data-role="page">
       <div data-role="header">
         <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
-        <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_builds'>Refresh</a>
-        <h1>Latest builds</h1>
+        <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_packages'>Refresh</a>
+        <h1>Latest packages</h1>
       </div><!-- /header -->
 
       <div data-role="content">
-        <p id="message_builds">Check out the 10 latest builds</p>
-        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_builds">
-        </div>
-        <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_builds'>clear</a>
+        <p id="message_packages">Check the latest packages information</p>
+        <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true"  id="content_packages">
+        </ul>
+        <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_packages'>clear</a>
       </div><!-- /content -->
     </section>
 
@@ -176,12 +201,26 @@
       </div><!-- /header -->
 
       <div data-role="content">
-        <p id="message_meetings">Check out the 10 coming meetings</p>
-        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_meetings">
-        </div>
+        <p id="message_meetings">Check the coming meetings</p>
+        <ul data-role="listview" data-theme="c" data-content-theme="d" id="content_meetings">
+        </ul>
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_meetings'>clear</a>
       </div><!-- /content -->
- 
+    </section>
+  
+    <section id="builds_page" data-role="page">
+      <div data-role="header">
+        <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+        <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_builds'>Refresh</a>
+        <h1>Latest builds</h1>
+      </div><!-- /header -->
+
+      <div data-role="content">
+        <p id="message_builds">Check the latest builds information</p>
+        <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_builds">
+        </ul>
+        <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_builds'>clear</a>
+      </div><!-- /content -->
     </section>
 
 </body>
