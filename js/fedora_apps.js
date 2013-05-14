@@ -180,19 +180,42 @@ function parse_bodhi(entry) {
 
 function parse_koji(entry) {
     var content = null;
-    if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.new'){
-        content = entry.agent + ' added new package : ‘'
-                + entry.package_listing.package.name + '’ ('
-                + entry.collection.branchname +  ')';
-    } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.retire'){
-        content = entry.agent + ' retired package: '
-                + entry.package_listing.package.name + '’ ('
-                + entry.collection.branchname +  ')';
-    } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.owner.update'){
-        content = entry.agent + ' changed the owner of package: '
-                + entry.package_listing.package.name + '’ ('
-                + entry.collection.branchname +  ') to: '
-                + entry.package_listing.owner;
+    if (entry.topic == 'org.fedoraproject.prod.buildsys.tag'){
+        content = entry.msg.owner + '\'s ‘'
+                + entry.msg.name + '-' 
+                + entry.msg.version + '-'
+                + entry.msg.release + '’ tagged into '
+                + entry.msg.tag +  ' by '
+                + entry.msg.user;
+    } else if (entry.topic == 'org.fedoraproject.prod.buildsys.build.state.change'){
+        var action = null;
+        switch(entry.msg.new){
+            case 0:
+                action = 'Started';
+                break;
+            case 1:
+                action = 'Completed';
+                break;
+            case 2:
+                action = 'Deleted';
+                break;
+            case 3:
+                action = 'Failed';
+                break;
+            case 4:
+                action = 'Cancelled';
+                break;
+        }
+        content = entry.msg.owner + '\'s ‘'
+                + entry.msg.name + '-' 
+                + entry.msg.version + '-'
+                + entry.msg.release + '’ ' + action + ' the build';
+    } else if (entry.topic == 'org.fedoraproject.prod.buildsys.repo.init'){
+        content = 'Repo initialized: '
+                + entry.msg.tag;
+    } else if (entry.topic == 'org.fedoraproject.prod.buildsys.repo.done'){
+        content = 'Repo done: '
+                + entry.msg.tag;
     } else {
         console.log(entry);
     }
