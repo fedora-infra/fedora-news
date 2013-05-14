@@ -132,7 +132,7 @@ function update_planet(deploy) {
 
 var get_fedmsg_msg = function(category, callback) {
     $.ajax({
-        url: "https://apps.stg.fedoraproject.org/datagrepper/raw/",
+        url: "https://apps.fedoraproject.org/datagrepper/raw/",
         data: 'delta=864000&category=' + category,
         dataType: "jsonp",
         success: function(data) {callback(data, category)},
@@ -152,15 +152,24 @@ function parse_bodhi(entry) {
         content = entry.msg.comment.author + ' commented on bodhi update : `'
                 + entry.msg.comment.update_title + '´ ('
                 + date.toUTCString() +  ')';
-    } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.retire'){
-        content = content.agent + ' retired package: '
-                + entry.package_listing.package.name + '’ ('
-                + entry.collection.branchname +  ')';
-    } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.owner.update'){
-        content = content.agent + ' changed the owner of package: '
-                + entry.package_listing.package.name + '’ ('
-                + entry.collection.branchname +  ') to: '
-                + entry.package_listing.owner;
+    } else if (entry.topic == 'org.fedoraproject.prod.bodhi.update.request.testing'){
+        content = entry.msg.update.submitter + ' requested: '
+                + entry.msg.update.title + ' to testing ('
+                + date.toUTCString() +  ')';
+    } else if (entry.topic == 'org.fedoraproject.prod.bodhi.update.request.stable'){
+        content = entry.msg.update.submitter + ' requested  '
+                + entry.msg.update.title + ' to stable ('
+                + date.toUTCString() +  ')';
+    } else if (entry.topic == 'org.fedoraproject.prod.bodhi.update.comment'){
+        content = entry.msg.comment.author + ' commented on update '
+                + entry.msg.comment.update_title + ' (Karma: '
+                + entry.msg.comment.karma +  ') ('
+                + date.toUTCString() +  ')';
+    } else if (entry.topic == 'org.fedoraproject.prod.bodhi.buildroot_override.tag'){
+        content = entry.msg.override.submitter + ' submitted a buildroot override for '
+                + entry.msg.override.build + ' ('
+                + date.toUTCString() +  ')';
+    
     } else {
         console.log(entry);
     }
@@ -173,15 +182,15 @@ function parse_bodhi(entry) {
 function parse_koji(entry) {
     var content = null;
     if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.new'){
-        content = content.agent + ' added new package : ‘'
+        content = entry.agent + ' added new package : ‘'
                 + entry.package_listing.package.name + '’ ('
                 + entry.collection.branchname +  ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.retire'){
-        content = content.agent + ' retired package: '
+        content = entry.agent + ' retired package: '
                 + entry.package_listing.package.name + '’ ('
                 + entry.collection.branchname +  ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.owner.update'){
-        content = content.agent + ' changed the owner of package: '
+        content = entry.agent + ' changed the owner of package: '
                 + entry.package_listing.package.name + '’ ('
                 + entry.collection.branchname +  ') to: '
                 + entry.package_listing.owner;
@@ -197,15 +206,15 @@ function parse_koji(entry) {
 function parse_pkgdb(entry) {
     var content = null;
     if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.new'){
-        content = content.agent + ' added new package : ‘'
+        content = entry.agent + ' added new package : ‘'
                 + entry.package_listing.package.name + '’ ('
                 + entry.package_listing.collection.branchname +  ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.retire'){
-        content = content.agent + ' retired package: '
+        content = entry.agent + ' retired package: '
                 + entry.package_listing.package.name + '’ ('
                 + entry.package_listing.collection.branchname +  ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.owner.update'){
-        content = content.agent + ' changed the owner of package: '
+        content = entry.agent + ' changed the owner of package: '
                 + entry.msg.package_listing.package.name + '’ ('
                 + entry.msg.package_listing.collection.branchname +  ') to: '
                 + entry.msg.package_listing.owner;
