@@ -25,7 +25,7 @@
         });
         $('#refresh_builds').bind("click", function () {
           console.log('refresh builds');
-          update_fedmsg("builds", "koji");
+          update_fedmsg("builds", "buildsys");
         });
         $('#refresh_meetings').bind("click", function () {
           console.log('refresh meetings');
@@ -38,7 +38,7 @@
         $('#refresh_all').bind("click", function () {
           update_planet(false);
           update_fedmsg("updates", "bodhi", false);
-          update_fedmsg("builds", "koji", false);
+          update_fedmsg("builds", "buildsys", false);
           update_fedmsg("packages", "pkgdb", false);
           $("#message_home").text('Cache refreshed');
         });
@@ -104,7 +104,7 @@
           load_fedmsg('updates', 'bodhi');
         } else if (page_id == 'builds_page') {
           console.log('load builds');
-          load_fedmsg('builds', 'koji');
+          load_fedmsg('builds', 'buildsys');
         } else if (page_id == 'packages_page') {
           console.log('load packages');
           load_fedmsg('packages', 'pkgdb');
