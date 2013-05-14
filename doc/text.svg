@@ -26,7 +26,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57,7 +57,7 @@
   <defs
      id="defs2441" />
   <path
-     d="m -46.496593,1.7883305 1063.999993,0 0,427.9999995 -1063.999993,0 0,-427.9999995 z"
+     d="m -2.8872895e-6,-1.7709078e-6 1063.9999028872896,0 L 1063.9999,428 -2.8872895e-6,428 l 0,-428.0000017709078 z"
      id="rect2828"
      style="fill:#4d4d4d;fill-opacity:1"
      inkscape:connector-curvature="0" />
@@ -67,11 +67,11 @@
      id="text4112"
      xml:space="preserve"
      style="font-size:168.32580566px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-     inkscape:export-filename="/home/pierrey/Desktop/meetings.png"
+     inkscape:export-filename="/home/pierrey/Desktop/packages_text.png"
      inkscape:export-xdpi="20.799999"
      inkscape:export-ydpi="20.799999"><tspan
        x="91.917343"
        y="286.28598"
        id="tspan4114"
-       style="font-size:100px;fill:#ffffff;fill-opacity:1;font-family:Comfortaa;-inkscape-font-specification:Comfortaa">meetings</tspan></text>
+       style="font-size:100px;fill:#ffffff;fill-opacity:1;font-family:Comfortaa;-inkscape-font-specification:Comfortaa">packages</tspan></text>
 </svg>
