@@ -133,7 +133,7 @@ function update_planet(deploy) {
 var get_fedmsg_msg = function(category, callback) {
     $.ajax({
         url: "https://apps.fedoraproject.org/datagrepper/raw/",
-        data: 'delta=3600&category=' + category,
+        data: 'delta=3600&order=desc&category=' + category,
         dataType: "jsonp",
         success: function(data) {callback(data, category)},
         error: function(data, statusCode) {
@@ -147,28 +147,28 @@ var get_fedmsg_msg = function(category, callback) {
 
 function parse_bodhi(entry) {
     var content = null;
-    var date = new Date(entry.timestamp * 1000);
+    var date = new Date(entry.timestamp * 1000).toLocaleString();
     if (entry.topic == 'org.fedoraproject.stg.bodhi.update.comment'){
         content = entry.msg.comment.author + ' commented on bodhi update : ‘'
                 + entry.msg.comment.update_title + '´ ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.bodhi.update.request.testing'){
         content = entry.msg.update.submitter + ' requested: '
                 + entry.msg.update.title + ' to testing ('
-                + date.toUTCString() +  ')';
+                + date +  ')';
     } else if (entry.topic == 'org.fedoraproject.prod.bodhi.update.request.stable'){
         content = entry.msg.update.submitter + ' requested  '
                 + entry.msg.update.title + ' to stable ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.bodhi.update.comment'){
         content = entry.msg.comment.author + ' commented on update '
                 + entry.msg.comment.update_title + ' (Karma: '
                 + entry.msg.comment.karma +  ') ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.bodhi.buildroot_override.tag'){
         content = entry.msg.override.submitter + ' submitted a buildroot override for '
                 + entry.msg.override.build + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else {
         console.log(entry);
     }
@@ -180,7 +180,7 @@ function parse_bodhi(entry) {
 
 function parse_koji(entry) {
     var content = null;
-    var date = new Date(entry.timestamp * 1000);
+    var date = new Date(entry.timestamp * 1000).toLocaleString();
     if (entry.topic == 'org.fedoraproject.prod.buildsys.tag'){
         content = entry.msg.owner + '\'s ‘'
                 + entry.msg.name + '-' 
@@ -188,7 +188,7 @@ function parse_koji(entry) {
                 + entry.msg.release + '’ tagged into '
                 + entry.msg.tag +  ' by '
                 + entry.msg.user + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.buildsys.build.state.change'){
         var action = null;
         switch(entry.msg.new){
@@ -212,15 +212,15 @@ function parse_koji(entry) {
                 + entry.msg.name + '-' 
                 + entry.msg.version + '-'
                 + entry.msg.release + '’ ' + action + ' the build ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.buildsys.repo.init'){
         content = 'Repo initialized: '
                 + entry.msg.tag + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.buildsys.repo.done'){
         content = 'Repo done: '
                 + entry.msg.tag + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else {
         console.log(entry);
     }
@@ -232,25 +232,25 @@ function parse_koji(entry) {
 
 function parse_pkgdb(entry) {
     var content = null;
-    var date = new Date(entry.timestamp * 1000);
+    var date = new Date(entry.timestamp * 1000).toLocaleString();
     if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.new'){
         content = entry.msg.agent + ' added new package : ‘'
                 + entry.msg.package_listing.package.name + '’ ('
                 + entry.msg.package_listing.collection.branchname +  ')'
                 + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.retire'){
         content = entry.msg.agent + ' retired package: '
                 + entry.msg.package_listing.package.name + '’ ('
                 + entry.msg.package_listing.collection.branchname +  ')'
                 + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.owner.update'){
         content = entry.msg.agent + ' changed the owner of package: '
                 + entry.msg.package_listing.package.name + '’ ('
                 + entry.msg.package_listing.collection.branchname +  ') to: '
                 + entry.msg.package_listing.owner + ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.acl.request.toggle'){
         content = entry.msg.agent + ' ' 
                 + entry.msg.acl_action + ' '
@@ -258,11 +258,11 @@ function parse_pkgdb(entry) {
                 + entry.msg.package_listing.package.name + '’ ('
                 + entry.msg.package_listing.collection.branchname +  ') to: '
                 + entry.msg.package_listing.owner+ ' ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.pkgdb.package.update'){
         content = entry.msg.agent + ' updated package: ‘'
                 + entry.msg.package + '’ ('
-                + date.toUTCString() +  ')';
+                + date + ')';
     } else if (entry.topic == 'org.fedoraproject.prod.git.pkgdb2branch.start') {
         // do nothing
     } else if (entry.topic == 'org.fedoraproject.prod.git.pkgdb2branch.complete') {
