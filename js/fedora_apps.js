@@ -118,11 +118,11 @@ function update_planet(deploy) {
             $("#message_planet").text('Could not retrieve anything from the planet');
             return;
         }
-        console.log(data);
+        //console.log(data);
         //var entries = data.responseData.feed.entries.map( function(el) { return parseEntry(el); });
         var entries = data.value.items.map( function(el) { return parseEntry(el); });
         localStorage.planet_entries = JSON.stringify(entries);
-        console.log(entries[0]);
+        //console.log(entries[0]);
         if (deploy == true) {
             load_planet_entries(entries);
             $("#message_planet").text('');
