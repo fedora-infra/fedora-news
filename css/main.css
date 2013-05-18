@@ -14,7 +14,8 @@ body, .ui-overlay-c {
     margin: 0 auto;
 }
 
-#index_page td {
+#index_page .ui-block-a ,
+#index_page .ui-block-b {
     /*background: #6f6f6f;*/
     background: #414141;
     border: 1px solid #CCCCCC;
@@ -23,7 +24,8 @@ body, .ui-overlay-c {
     overflow: hidden;
 }
 
-#index_page td a{
+#index_page .ui-block-a a,
+#index_page .ui-block-b a{
     margin: 1em auto;
     padding: 1em;
     display: inline-block;
