@@ -44,3 +44,8 @@ body, .ui-overlay-c {
     width: 100%;
     padding: 0;
 }
+
+.ui-btn-inner, .ui-li .ui-btn-text a.ui-link-inherit {
+    white-space: normal;
+}
+
