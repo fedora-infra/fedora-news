@@ -24,11 +24,11 @@ body, .ui-overlay-c {
     overflow: hidden;
 }
 
-#index_page .ui-block-a a,
-#index_page .ui-block-b a{
-    margin: 1em auto;
+#index_page a{
     padding: 1em;
     display: inline-block;
+    width: 50%;
+    text-align: center;
 }
 
 .loading {
