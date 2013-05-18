@@ -125,7 +125,7 @@ var get_fedmsg_msg = function(category, callback) {
 function parse_fedmsg(entry) {
     var content = null;
     var date = new Date(entry.timestamp * 1000).toLocaleString();
-    content = '<li> <a href="' + entry.meta.link + '">' 
+    content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
               + entry.meta.subtitle+ ' ('
               + date + ')</a></li>';
     return content;
