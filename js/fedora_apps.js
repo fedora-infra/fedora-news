@@ -123,7 +123,6 @@ var get_fedmsg_msg = function(category, callback) {
 };
 
 function parse_fedmsg(entry) {
-    console.log(entry);
     var content = null;
     var date = new Date(entry.timestamp * 1000).toLocaleString();
     content = '<li> <a href="' + entry.meta.link + '">' 
@@ -171,7 +170,7 @@ function update_fedmsg(id, category, deploy) {
         }
         var entries = data.raw_messages;
         localStorage.setItem(id, JSON.stringify(entries));
-        console.log(entries[0]);
+        //console.log(entries[0]);
         if (deploy == true) {
             load_fedmsg_entries(entries, id);
             $("#message_" + id).text('');
