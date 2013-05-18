@@ -133,7 +133,7 @@ function update_planet(deploy) {
 var get_fedmsg_msg = function(category, callback) {
     $.ajax({
         url: "https://apps.fedoraproject.org/datagrepper/raw/",
-        data: 'delta=3600&order=desc&category=' + category,
+        data: 'delta=360000&rows_per_page=20&order=desc&category=' + category,
         dataType: "jsonp",
         success: function(data) {callback(data, category)},
         error: function(data, statusCode) {
