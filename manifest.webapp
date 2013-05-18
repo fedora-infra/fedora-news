@@ -7,7 +7,7 @@
   },
   "developer": {
     "name": "Pierre-Yves Chibon",
-    "url": "http://github.com/pypingou/fedora-news"
+    "url": "http://github.com/fedora-infra/fedora-news"
   },
   "default_locale": "en",
   "fullscreen": "true"
