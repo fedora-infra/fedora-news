@@ -25,6 +25,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************/
 
+var socket = null;
+
 var hostname = (function () {
     var a = document.createElement('a');
     return function (url) {
@@ -176,18 +178,24 @@ function update_fedmsg(id, category, deploy) {
             $("#message_" + id).text('');
         }
     });
+
+    // If for some reason we got disconnected from our
+    // websocket, it should have set itself to null.  If
+    // that happened, let's try reconnecting.
+    if (socket == null) {
+        setup_websocket_listener();
+    }
 }
 
 function setup_websocket_listener() {
-    //document.domain = "fedoraproject.org";
-    var socket = new WebSocket("wss://hub.fedoraproject.org:9939");
+    socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
         // Tell the hub that we want to start receiving all messages.
         socket.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
     };
-    socket.onerror = function(e){};
-    socket.onclose = function(e){};
+    socket.onerror = function(e){socket=null;};
+    socket.onclose = function(e){socket=null;};
 
     // Our main callback
     socket.onmessage = function(e){
