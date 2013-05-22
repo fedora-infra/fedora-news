@@ -177,3 +177,50 @@ function update_fedmsg(id, category, deploy) {
         }
     });
 }
+
+function setup_websocket_listener() {
+    //document.domain = "fedoraproject.org";
+    var socket = new WebSocket("wss://hub.fedoraproject.org:9939");
+
+    socket.onopen = function(e){
+        // Tell the hub that we want to start receiving all messages.
+        socket.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
+    };
+    socket.onerror = function(e){};
+    socket.onclose = function(e){};
+
+    // Our main callback
+    socket.onmessage = function(e){
+        var data, json, topic, body, tokens, category, page_id, deploy, id_lookup;
+
+        // Build a handy mapping of fedmsg categories to CSS ids.
+        id_lookup = {
+            bodhi: "updates",
+            buildsys: "builds",
+            pkgdb: "packages",
+        }
+
+        // Parse and extract the category from the websocket message.
+        data = e.data;
+        json = JSON.parse(data);
+        topic = json.topic;
+        tokens = topic.split(".");
+        category = tokens[3];
+
+        // If we don't have any pages handle this msg, then bail out early.
+        if (id_lookup[category] === undefined) {
+            return;
+        }
+
+        // We'll refresh the cache below, but only refresh the UI
+        // if we're looking at the correct page.
+        page_id = $.mobile.activePage.attr("id");
+        deploy = (page_id.indexOf(id_lookup[category]) >= 0); // boolean
+
+        // Go query datagrepper for the latest.
+        // It's a shame.  We received the whole message already over
+        // the websocket connection, but we have to go query again to
+        // get the fedmsg.meta information.
+        update_fedmsg(id_lookup[category], category, deploy);
+    };
+}
