@@ -34,7 +34,7 @@ var hostname = (function () {
         return a.hostname;
     }
 })();
-
+/*
 var get_rss = function(callback) {
     var url = 'http://planet.fedoraproject.org/atom.xml';
     console.log(url);
@@ -46,6 +46,7 @@ var get_rss = function(callback) {
     });
     
 };
+*/
 
 var parseEntry = function(el) {
     var date = el.publishedDate || el.pubDate;
@@ -145,7 +146,7 @@ function load_fedmsg(id, category) {
     }
 }
 
-function load_fedmsg_entries(entries, id){
+function load_fedmsg_entries(entries, id, category){
     entries.map(function(entry) {
         var content = parse_fedmsg(entry);
         if (content) {
@@ -166,6 +167,8 @@ function update_fedmsg(id, category, deploy) {
 
     get_fedmsg_msg(category, function(data, category) {
         console.log("Get fedmsg: " + category);
+        console.log(data);
+        
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
             return;
@@ -174,7 +177,12 @@ function update_fedmsg(id, category, deploy) {
         localStorage.setItem(id, JSON.stringify(entries));
         //console.log(entries[0]);
         if (deploy == true) {
-            load_fedmsg_entries(entries, id);
+            if (category == 'planet') {
+                //load_planet_entries(entries, id);
+                load_fedmsg_entries(entries, id);
+            } else {
+                load_fedmsg_entries(entries, id);
+            }
             $("#message_" + id).text('');
         }
     });
@@ -206,6 +214,7 @@ function setup_websocket_listener() {
             bodhi: "updates",
             buildsys: "builds",
             pkgdb: "packages",
+            planet: "planet"
         }
 
         // Parse and extract the category from the websocket message.

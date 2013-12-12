@@ -17,7 +17,9 @@
       $(function () {
         /* Refresh buttons */
         $('#refresh_planet').bind("click", function () {
-          update_planet();
+          //update_planet();
+          console.log('refresh planet');
+          update_fedmsg("planet", "planet");
         });
         $('#refresh_updates').bind("click", function () {
           console.log('refresh updates');
@@ -36,7 +38,8 @@
         });
 
         $('#refresh_all').bind("click", function () {
-          update_planet(false);
+          //update_planet(false);
+          update_fedmsg("planet", "planet", false);
           update_fedmsg("updates", "bodhi", false);
           update_fedmsg("builds", "buildsys", false);
           update_fedmsg("packages", "pkgdb", false);
@@ -47,7 +50,8 @@
         /* Clear buttons */
         $('#clear_planet').bind("click", function () {
           $("#content_planet").html('');
-          localStorage.planet_entries = null;
+//          localStorage.planet_entries = null;
+            localStorage.setItem('planet', null);
           $("#message_planet").text('Cache cleared');
         });
         $('#clear_updates').bind("click", function () {
@@ -72,7 +76,8 @@
         });
 
         $('#clear_all').bind("click", function () {
-          localStorage.planet_entries = null;
+//          localStorage.planet_entries = null;
+          localStorage.setItem('planet', null);
           localStorage.setItem('updates', null);
           localStorage.setItem('packages', null);
           localStorage.setItem('builds', null);
@@ -98,7 +103,9 @@
         $("#message_home").text('');
         var page_id = $.mobile.activePage.attr("id");
         if (page_id == 'planet_page') {
-          load_planet();
+//          load_planet();
+          console.log('load planet');
+          load_fedmsg('planet', 'planet');
         } else if (page_id == 'updates_page') {
           console.log('load updates');
           load_fedmsg('updates', 'bodhi');
@@ -143,7 +150,7 @@
         <a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
       </div>
     </section>
-
+    
     <section id="planet_page" data-role="page">
       <div data-role="header">
         <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
@@ -152,8 +159,13 @@
       </div><!-- /header -->
       <div data-role="content">
         <p id="message_planet">Check the latest posts of the planet</p>
+        
         <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_planet">
         </div>
+        <!--
+        <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_planet">
+        </ul>
+        -->
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_planet'>clear</a>
       </div>
     </section>
