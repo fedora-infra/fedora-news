@@ -48,67 +48,67 @@ var get_rss = function(callback) {
 };
 */
 
-var parseEntry = function(el) {
-    var date = el.publishedDate || el.pubDate;
-    var content = el.content || el.description;
-    return { title: el.title,
-             content: content,
-             date: date,
-             link: el.link,
-             shortLink: hostname(el.link),
-             author: el.author };
-}
+//var parseEntry = function(el) {
+//    var date = el.publishedDate || el.pubDate;
+//    var content = el.content || el.description;
+//    return { title: el.title,
+//             content: content,
+//             date: date,
+//             link: el.link,
+//             shortLink: hostname(el.link),
+//             author: el.author };
+//}
 
-function load_planet_entries(entries){
-    entries.map(function(entry) {
-        var content = '<div data-role="collapsible"> '
-            //+ '<h3>' + entry.author + ': ' + entry.title + '</h3>' +
-            + '<h3>' + entry.author.name + ': ' + entry.title + '</h3>' +
-            '<h3>' + entry.title + '</h3>' +
-            '<a data-role="button" data-theme="c" data-icon="grid" href="' 
-            + entry.link +'">Source</a><br />'
-            //+ entry.content +
-            + entry.content.content +
-        '</div>';
-        $("#content_planet").append( content );
-        $("#content_planet").collapsibleset('refresh');
-    });
-}
+//function load_planet_entries(entries){
+//    entries.map(function(entry) {
+//        var content = '<div data-role="collapsible"> '
+//            //+ '<h3>' + entry.author + ': ' + entry.title + '</h3>' +
+//            + '<h3>' + entry.author.name + ': ' + entry.title + '</h3>' +
+//            '<h3>' + entry.title + '</h3>' +
+//            '<a data-role="button" data-theme="c" data-icon="grid" href="' 
+//            + entry.link +'">Source</a><br />'
+//            //+ entry.content +
+//            + entry.content.content +
+//        '</div>';
+//        $("#content_planet").append( content );
+//        $("#content_planet").collapsibleset('refresh');
+//    });
+//}
 
-function load_planet() {
-    $("#content_planet").html('');
-    entries = localStorage.planet_entries ? localStorage.planet_entries : [];
-    entries = eval(entries);
-    if (entries == null || entries.length == 0) {
-        update_planet()
-    } else {
-        $("#message_planet").text('Cached posts from the planet');
-        load_planet_entries(entries);
-    }
-}
+//function load_planet() {
+//    $("#content_planet").html('');
+//    entries = localStorage.planet_entries ? localStorage.planet_entries : [];
+//    entries = eval(entries);
+//    if (entries == null || entries.length == 0) {
+//        update_planet()
+//    } else {
+//        $("#message_planet").text('Cached posts from the planet');
+//        load_planet_entries(entries);
+//    }
+//}
 
-function update_planet(deploy) {
-    if(typeof(deploy)==='undefined') deploy = true;
-    if (deploy == true) {
-        $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
-    }
-    var articles = [ ];
-
-    $("#content_planet").html('');
-
-    get_rss(function(data) {
-        if (!data) {
-            $("#message_planet").text('Could not retrieve anything from the planet');
-            return;
-        }
-        var entries = data.value.items.map( function(el) { return parseEntry(el); });
-        localStorage.planet_entries = JSON.stringify(entries);
-        if (deploy == true) {
-            load_planet_entries(entries);
-            $("#message_planet").text('');
-        }
-    });
-}
+//function update_planet(deploy) {
+//    if(typeof(deploy)==='undefined') deploy = true;
+//    if (deploy == true) {
+//        $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
+//    }
+////    var articles = [ ];
+//
+//    $("#content_planet").html('');
+//
+//    get_rss(function(data) {
+//        if (!data) {
+//            $("#message_planet").text('Could not retrieve anything from the planet');
+//            return;
+//        }
+//        var entries = data.value.items.map( function(el) { return parseEntry(el); });
+//        localStorage.planet_entries = JSON.stringify(entries);
+//        if (deploy == true) {
+//            load_planet_entries(entries);
+//            $("#message_planet").text('');
+//        }
+//    });
+//}
 
 var get_fedmsg_msg = function(category, callback) {
     $.ajax({
@@ -125,12 +125,25 @@ var get_fedmsg_msg = function(category, callback) {
     });
 };
 
-function parse_fedmsg(entry) {
+function parse_fedmsg(entry, id) {
     var content = null;
+    console.log(entry);
     var date = new Date(entry.timestamp * 1000).toLocaleString();
-    content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
-              + entry.meta.subtitle+ ' ('
-              + date + ')</a></li>';
+    if (id == 'planet') {
+        content = '<div data-role="collapsible"> '
+                    //+ '<h3>' + entry.author + ': ' + entry.title + '</h3>' +
+                    + '<h3>' + entry.msg.name + ': ' + entry.meta.subtitle + '</h3>' +
+                    '<h3>' + entry.msg.post.title + '</h3>' +
+                    '<a data-role="button" data-theme="c" data-icon="grid" href="' 
+                    + entry.meta.link +'">Source</a><br />'
+                    //+ entry.content +
+                    + (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
+                '</div>';
+    } else {
+        content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
+                  + entry.meta.subtitle+ ' ('
+                  + date + ')</a></li>';
+    }
     return content;
 }
 
@@ -138,8 +151,9 @@ function load_fedmsg(id, category) {
     $("#content_" + id).html('');
     entries = localStorage.getItem(id) ? localStorage.getItem(id) : [];
     entries = eval(entries);
+//    console.log(entries);
     if (entries == null || entries.length == 0) {
-        update_fedmsg(id, category)
+        update_fedmsg(id, category);
     } else {
         $("#message_" + id).text('Loading cached information');
         load_fedmsg_entries(entries, id);
@@ -148,10 +162,14 @@ function load_fedmsg(id, category) {
 
 function load_fedmsg_entries(entries, id, category){
     entries.map(function(entry) {
-        var content = parse_fedmsg(entry);
+        var content = parse_fedmsg(entry, id);
         if (content) {
             $("#content_" + id).append( content );
-            $("#content_" + id).listview('refresh');
+            if (id == 'planet') {
+                $("#content_" + id).collapsibleset('refresh');
+            } else {
+                $("#content_" + id).listview('refresh');
+            }
         }
     });
 }
@@ -167,22 +185,18 @@ function update_fedmsg(id, category, deploy) {
 
     get_fedmsg_msg(category, function(data, category) {
         console.log("Get fedmsg: " + category);
-        console.log(data);
+//        console.log(data);
         
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
             return;
         }
+        
         var entries = data.raw_messages;
         localStorage.setItem(id, JSON.stringify(entries));
         //console.log(entries[0]);
         if (deploy == true) {
-            if (category == 'planet') {
-                //load_planet_entries(entries, id);
-                load_fedmsg_entries(entries, id);
-            } else {
-                load_fedmsg_entries(entries, id);
-            }
+            load_fedmsg_entries(entries, id);
             $("#message_" + id).text('');
         }
     });
