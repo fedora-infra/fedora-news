@@ -34,81 +34,6 @@ var hostname = (function () {
         return a.hostname;
     }
 })();
-/*
-var get_rss = function(callback) {
-    var url = 'http://planet.fedoraproject.org/atom.xml';
-    console.log(url);
-    $.ajax({
-        //url: '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
-        url: '//pipes.yahoo.com/pipes/pipe.run?_id=2FV68p9G3BGVbc7IdLq02Q&_render=json&feedcount=10&feedurl=' + encodeURIComponent(url),
-        dataType: 'json',
-        success: callback
-    });
-    
-};
-*/
-
-//var parseEntry = function(el) {
-//    var date = el.publishedDate || el.pubDate;
-//    var content = el.content || el.description;
-//    return { title: el.title,
-//             content: content,
-//             date: date,
-//             link: el.link,
-//             shortLink: hostname(el.link),
-//             author: el.author };
-//}
-
-//function load_planet_entries(entries){
-//    entries.map(function(entry) {
-//        var content = '<div data-role="collapsible"> '
-//            //+ '<h3>' + entry.author + ': ' + entry.title + '</h3>' +
-//            + '<h3>' + entry.author.name + ': ' + entry.title + '</h3>' +
-//            '<h3>' + entry.title + '</h3>' +
-//            '<a data-role="button" data-theme="c" data-icon="grid" href="' 
-//            + entry.link +'">Source</a><br />'
-//            //+ entry.content +
-//            + entry.content.content +
-//        '</div>';
-//        $("#content_planet").append( content );
-//        $("#content_planet").collapsibleset('refresh');
-//    });
-//}
-
-//function load_planet() {
-//    $("#content_planet").html('');
-//    entries = localStorage.planet_entries ? localStorage.planet_entries : [];
-//    entries = eval(entries);
-//    if (entries == null || entries.length == 0) {
-//        update_planet()
-//    } else {
-//        $("#message_planet").text('Cached posts from the planet');
-//        load_planet_entries(entries);
-//    }
-//}
-
-//function update_planet(deploy) {
-//    if(typeof(deploy)==='undefined') deploy = true;
-//    if (deploy == true) {
-//        $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
-//    }
-////    var articles = [ ];
-//
-//    $("#content_planet").html('');
-//
-//    get_rss(function(data) {
-//        if (!data) {
-//            $("#message_planet").text('Could not retrieve anything from the planet');
-//            return;
-//        }
-//        var entries = data.value.items.map( function(el) { return parseEntry(el); });
-//        localStorage.planet_entries = JSON.stringify(entries);
-//        if (deploy == true) {
-//            load_planet_entries(entries);
-//            $("#message_planet").text('');
-//        }
-//    });
-//}
 
 var get_fedmsg_msg = function(category, callback) {
     $.ajax({
@@ -127,7 +52,6 @@ var get_fedmsg_msg = function(category, callback) {
 
 function parse_fedmsg(entry, id) {
     var content = null;
-    console.log(entry);
     var date = new Date(entry.timestamp * 1000).toLocaleString();
     if (id == 'planet') {
         content = '<div data-role="collapsible"> '
@@ -184,8 +108,7 @@ function update_fedmsg(id, category, deploy) {
     $("#content_" + id).html('');
 
     get_fedmsg_msg(category, function(data, category) {
-        console.log("Get fedmsg: " + category);
-//        console.log(data);
+//        console.log("Get fedmsg: " + category);
         
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
