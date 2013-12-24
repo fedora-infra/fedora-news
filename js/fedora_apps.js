@@ -55,12 +55,10 @@ function parse_fedmsg(entry, id) {
     var date = new Date(entry.timestamp * 1000).toLocaleString();
     if (id == 'planet') {
         content = '<div data-role="collapsible"> '
-                    //+ '<h3>' + entry.author + ': ' + entry.title + '</h3>' +
                     + '<h3>' + entry.msg.name + ': ' + entry.meta.subtitle + '</h3>' +
                     '<h3>' + entry.msg.post.title + '</h3>' +
                     '<a data-role="button" data-theme="c" data-icon="grid" href="' 
                     + entry.meta.link +'">Source</a><br />'
-                    //+ entry.content +
                     + (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
                 '</div>';
     } else {
@@ -84,7 +82,7 @@ function load_fedmsg(id, category) {
     }
 }
 
-function load_fedmsg_entries(entries, id, category){
+function load_fedmsg_entries(entries, id){
     entries.map(function(entry) {
         var content = parse_fedmsg(entry, id);
         if (content) {

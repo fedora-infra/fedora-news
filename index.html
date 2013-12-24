@@ -17,28 +17,26 @@
       $(function () {
         /* Refresh buttons */
         $('#refresh_planet').bind("click", function () {
-          //update_planet();
-          console.log('refresh planet');
+//          console.log('refresh planet');
           update_fedmsg("planet", "planet");
         });
         $('#refresh_updates').bind("click", function () {
-          console.log('refresh updates');
+//          console.log('refresh updates');
           update_fedmsg("updates", "bodhi");
         });
         $('#refresh_builds').bind("click", function () {
-          console.log('refresh builds');
+//          console.log('refresh builds');
           update_fedmsg("builds", "buildsys");
         });
         $('#refresh_meetings').bind("click", function () {
-          console.log('refresh meetings');
+//          console.log('refresh meetings');
         });
         $('#refresh_packages').bind("click", function () {
-          console.log('refresh packages');
+//          console.log('refresh packages');
           update_fedmsg("packages", "pkgdb");
         });
 
         $('#refresh_all').bind("click", function () {
-          //update_planet(false);
           update_fedmsg("planet", "planet", false);
           update_fedmsg("updates", "bodhi", false);
           update_fedmsg("builds", "buildsys", false);
@@ -50,7 +48,6 @@
         /* Clear buttons */
         $('#clear_planet').bind("click", function () {
           $("#content_planet").html('');
-//          localStorage.planet_entries = null;
             localStorage.setItem('planet', null);
           $("#message_planet").text('Cache cleared');
         });
@@ -88,7 +85,7 @@
           var request = navigator.mozApps.getSelf();
           request.onsuccess = function() {
             if (!this.result) {
-              console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
+//            console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
               request = navigator.mozApps.install(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
               request.onerror = function() {
                 console.log("Install failed: " + this.error.name);
@@ -103,20 +100,19 @@
         $("#message_home").text('');
         var page_id = $.mobile.activePage.attr("id");
         if (page_id == 'planet_page') {
-//          load_planet();
-          console.log('load planet');
+//          console.log('load planet');
           load_fedmsg('planet', 'planet');
         } else if (page_id == 'updates_page') {
-          console.log('load updates');
+//          console.log('load updates');
           load_fedmsg('updates', 'bodhi');
         } else if (page_id == 'builds_page') {
-          console.log('load builds');
+//          console.log('load builds');
           load_fedmsg('builds', 'buildsys');
         } else if (page_id == 'packages_page') {
-          console.log('load packages');
+//          console.log('load packages');
           load_fedmsg('packages', 'pkgdb');
         } else if (page_id == 'meetings_page') {
-          console.log('load meetings');
+//          console.log('load meetings');
         }
       });
 
@@ -150,7 +146,7 @@
         <a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
       </div>
     </section>
-    
+
     <section id="planet_page" data-role="page">
       <div data-role="header">
         <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
@@ -159,13 +155,8 @@
       </div><!-- /header -->
       <div data-role="content">
         <p id="message_planet">Check the latest posts of the planet</p>
-        
         <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_planet">
         </div>
-        <!--
-        <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_planet">
-        </ul>
-        -->
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_planet'>clear</a>
       </div>
     </section>
