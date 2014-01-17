@@ -55,11 +55,12 @@ function parse_fedmsg(entry, id) {
     var date = new Date(entry.timestamp * 1000).toLocaleString();
     if (id == 'planet') {
         content = '<div data-role="collapsible"> '
-                    + '<h3>' + entry.msg.name + ': ' + entry.meta.subtitle + '</h3>' +
-                    '<h3>' + entry.msg.post.title + '</h3>' +
-                    '<a data-role="button" data-theme="c" data-icon="grid" href="' 
+                    + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
+                    //+ '<h3>' + entry.msg.post.title + '</h3>'
+                    + '<a data-role="button" data-theme="c" data-icon="grid" href="' 
                     + entry.meta.link +'">Source</a><br />'
-                    + (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
+                    //+ (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
+                    + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
                 '</div>';
     } else {
         content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
@@ -114,8 +115,8 @@ function update_fedmsg(id, category, deploy) {
         }
         
         var entries = data.raw_messages;
+        console.log(entries);
         localStorage.setItem(id, JSON.stringify(entries));
-        //console.log(entries[0]);
         if (deploy == true) {
             load_fedmsg_entries(entries, id);
             $("#message_" + id).text('');
@@ -126,11 +127,13 @@ function update_fedmsg(id, category, deploy) {
     // websocket, it should have set itself to null.  If
     // that happened, let's try reconnecting.
     if (socket == null) {
+        $("#message_" + id).text('Connection with fedmsg has been disconnected');
         setup_websocket_listener();
     }
 }
 
 function setup_websocket_listener() {
+    console.log("setup_websocket_listener");
     socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
@@ -138,10 +141,15 @@ function setup_websocket_listener() {
         socket.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
     };
     socket.onerror = function(e){socket=null;};
-    socket.onclose = function(e){socket=null;};
+    socket.onclose = function(e){
+        console.log("onclose");
+//        socket=null;
+        setup_websocket_listener();
+    };
 
     // Our main callback
     socket.onmessage = function(e){
+        console.log("onmessage");
         var data, json, topic, body, tokens, category, page_id, deploy, id_lookup;
 
         // Build a handy mapping of fedmsg categories to CSS ids.
