@@ -182,5 +182,35 @@ function setup_websocket_listener() {
         // the websocket connection, but we have to go query again to
         // get the fedmsg.meta information.
         update_fedmsg(id_lookup[category], category, deploy);
+        
+        // Add blink effect on page's title to alert user of new post
+        var timerOnBlur = null;
+        var originalTitle = document.title;
+        $(window).on("blur focus", function(e) {
+            var prevType = $(this).data("prevType");
+            console.log("blur focus");
+
+            if (prevType != e.type) { // reduce double fire issues
+                switch (e.type) {
+                    case "blur":
+                        console.log("blur");
+                        timerOnBlur = setInterval(function(){
+                            var title = document.title;
+                            document.title = (title == originalTitle ? "New post" : originalTitle);
+                        }, 1000);
+
+                        break;
+                    case "focus":
+                        console.log("focus");
+                        document.title = originalTitle;
+                        $(this).unbind('blur');
+                        clearInterval(timerOnBlur);
+                        timerOnBlur = 0;
+                        break;
+                }
+            }
+
+            $(this).data("prevType", e.type);
+        });
     };
 }
