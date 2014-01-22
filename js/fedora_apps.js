@@ -67,6 +67,7 @@ function parse_fedmsg(entry, id) {
                   + entry.meta.subtitle+ ' ('
                   + date + ')</a></li>';
     }
+    
     return content;
 }
 
@@ -134,6 +135,32 @@ function update_fedmsg(id, category, deploy) {
 
 function setup_websocket_listener() {
     console.log("setup_websocket_listener");
+    
+    // Add blink effect on page's title to alert user of new post
+    var originalTitle = document.title;
+    var visibility = (function(){
+        var stateKey, eventKey, keys = {
+            hidden: "visibilitychange",
+            webkitHidden: "webkitvisibilitychange",
+            mozHidden: "mozvisibilitychange",
+            msHidden: "msvisibilitychange"
+        };
+        for (stateKey in keys) {
+            if (stateKey in document) {
+                eventKey = keys[stateKey];
+                break;
+            }
+        }
+        return function(c) {
+            if (c) document.addEventListener(eventKey, c);
+            return !document[stateKey];
+        }
+    })();
+    
+    visibility(function(){
+        document.title = visibility() ? originalTitle : "New post";
+    });
+    
     socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
@@ -184,33 +211,6 @@ function setup_websocket_listener() {
         update_fedmsg(id_lookup[category], category, deploy);
         
         // Add blink effect on page's title to alert user of new post
-        var timerOnBlur = null;
-        var originalTitle = document.title;
-        $(window).on("blur focus", function(e) {
-            var prevType = $(this).data("prevType");
-            console.log("blur focus");
-
-            if (prevType != e.type) { // reduce double fire issues
-                switch (e.type) {
-                    case "blur":
-                        console.log("blur");
-                        timerOnBlur = setInterval(function(){
-                            var title = document.title;
-                            document.title = (title == originalTitle ? "New post" : originalTitle);
-                        }, 1000);
-
-                        break;
-                    case "focus":
-                        console.log("focus");
-                        document.title = originalTitle;
-                        $(this).unbind('blur');
-                        clearInterval(timerOnBlur);
-                        timerOnBlur = 0;
-                        break;
-                }
-            }
-
-            $(this).data("prevType", e.type);
-        });
+        
     };
 }
