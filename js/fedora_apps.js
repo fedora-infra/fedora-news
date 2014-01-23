@@ -116,7 +116,6 @@ function update_fedmsg(id, category, deploy) {
         }
         
         var entries = data.raw_messages;
-        console.log(entries);
         localStorage.setItem(id, JSON.stringify(entries));
         if (deploy == true) {
             load_fedmsg_entries(entries, id);
@@ -134,7 +133,7 @@ function update_fedmsg(id, category, deploy) {
 }
 
 function setup_websocket_listener() {
-    console.log("setup_websocket_listener");
+//    console.log("setup_websocket_listener");
     socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
@@ -143,14 +142,14 @@ function setup_websocket_listener() {
     };
     socket.onerror = function(e){socket=null;};
     socket.onclose = function(e){
-        console.log("onclose");
+//        console.log("onclose");
 //        socket=null;
         setup_websocket_listener();
     };
 
     // Our main callback
     socket.onmessage = function(e){
-        console.log("onmessage");
+//        console.log("onmessage");
         var data, json, topic, body, tokens, category, page_id, deploy, id_lookup;
 
         // Build a handy mapping of fedmsg categories to CSS ids.
