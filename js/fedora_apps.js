@@ -135,32 +135,6 @@ function update_fedmsg(id, category, deploy) {
 
 function setup_websocket_listener() {
     console.log("setup_websocket_listener");
-    
-    // Add blink effect on page's title to alert user of new post
-    var originalTitle = document.title;
-    var visibility = (function(){
-        var stateKey, eventKey, keys = {
-            hidden: "visibilitychange",
-            webkitHidden: "webkitvisibilitychange",
-            mozHidden: "mozvisibilitychange",
-            msHidden: "msvisibilitychange"
-        };
-        for (stateKey in keys) {
-            if (stateKey in document) {
-                eventKey = keys[stateKey];
-                break;
-            }
-        }
-        return function(c) {
-            if (c) document.addEventListener(eventKey, c);
-            return !document[stateKey];
-        }
-    })();
-    
-    visibility(function(){
-        document.title = visibility() ? originalTitle : "New post";
-    });
-    
     socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
@@ -211,6 +185,36 @@ function setup_websocket_listener() {
         update_fedmsg(id_lookup[category], category, deploy);
         
         // Add blink effect on page's title to alert user of new post
-        
+        var originalTitle = document.title;
+        var visibility = (function(){
+            var stateKey, eventKey, keys = {
+                hidden: "visibilitychange",
+                webkitHidden: "webkitvisibilitychange",
+                mozHidden: "mozvisibilitychange",
+                msHidden: "msvisibilitychange"
+            };
+            for (stateKey in keys) {
+                if (stateKey in document) {
+                    eventKey = keys[stateKey];
+                    break;
+                }
+            }
+            return function(c) {
+                if (c) document.addEventListener(eventKey, c);
+                return !document[stateKey];
+            };
+        })();
+
+        var blinkTimer = null;
+        visibility(function(){
+            if (visibility()) {
+                clearInterval(blinkTimer);
+            } else {
+                blinkTimer = setInterval(function() {
+                    var title = document.title;
+                    document.title = (title === originalTitle) ? "New " + id_lookup[category] : originalTitle;
+                }, 800);
+            }
+        });
     };
 }
