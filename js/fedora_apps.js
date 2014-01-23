@@ -35,80 +35,6 @@ var hostname = (function () {
     }
 })();
 
-var get_rss = function(callback) {
-    var url = 'http://planet.fedoraproject.org/atom.xml';
-    console.log(url);
-    $.ajax({
-        //url: '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
-        url: '//pipes.yahoo.com/pipes/pipe.run?_id=2FV68p9G3BGVbc7IdLq02Q&_render=json&feedcount=10&feedurl=' + encodeURIComponent(url),
-        dataType: 'json',
-        success: callback
-    });
-    
-};
-
-var parseEntry = function(el) {
-    var date = el.publishedDate || el.pubDate;
-    var content = el.content || el.description;
-    return { title: el.title,
-             content: content,
-             date: date,
-             link: el.link,
-             shortLink: hostname(el.link),
-             author: el.author };
-}
-
-function load_planet_entries(entries){
-    entries.map(function(entry) {
-        var content = '<div data-role="collapsible"> '
-            //+ '<h3>' + entry.author + ': ' + entry.title + '</h3>' +
-            + '<h3>' + entry.author.name + ': ' + entry.title + '</h3>' +
-            '<h3>' + entry.title + '</h3>' +
-            '<a data-role="button" data-theme="c" data-icon="grid" href="' 
-            + entry.link +'">Source</a><br />'
-            //+ entry.content +
-            + entry.content.content +
-        '</div>';
-        $("#content_planet").append( content );
-        $("#content_planet").collapsibleset('refresh');
-    });
-}
-
-function load_planet() {
-    $("#content_planet").html('');
-    entries = localStorage.planet_entries ? localStorage.planet_entries : [];
-    entries = eval(entries);
-    if (entries == null || entries.length == 0) {
-        update_planet()
-    } else {
-        $("#message_planet").text('Cached posts from the planet');
-        load_planet_entries(entries);
-    }
-}
-
-function update_planet(deploy) {
-    if(typeof(deploy)==='undefined') deploy = true;
-    if (deploy == true) {
-        $("#message_planet").html('<span class="loading">Retrieving posts from the planet</span>');
-    }
-    var articles = [ ];
-
-    $("#content_planet").html('');
-
-    get_rss(function(data) {
-        if (!data) {
-            $("#message_planet").text('Could not retrieve anything from the planet');
-            return;
-        }
-        var entries = data.value.items.map( function(el) { return parseEntry(el); });
-        localStorage.planet_entries = JSON.stringify(entries);
-        if (deploy == true) {
-            load_planet_entries(entries);
-            $("#message_planet").text('');
-        }
-    });
-}
-
 var get_fedmsg_msg = function(category, callback) {
     $.ajax({
         url: "https://apps.fedoraproject.org/datagrepper/raw/",
@@ -124,12 +50,23 @@ var get_fedmsg_msg = function(category, callback) {
     });
 };
 
-function parse_fedmsg(entry) {
+function parse_fedmsg(entry, id) {
     var content = null;
     var date = new Date(entry.timestamp * 1000).toLocaleString();
-    content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
-              + entry.meta.subtitle+ ' ('
-              + date + ')</a></li>';
+    if (id == 'planet') {
+        content = '<div data-role="collapsible"> '
+                    + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
+                    //+ '<h3>' + entry.msg.post.title + '</h3>'
+                    + '<a data-role="button" data-theme="c" data-icon="grid" href="' 
+                    + entry.meta.link +'">Source</a><br />'
+                    //+ (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
+                    + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
+                '</div>';
+    } else {
+        content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
+                  + entry.meta.subtitle+ ' ('
+                  + date + ')</a></li>';
+    }
     return content;
 }
 
@@ -137,8 +74,9 @@ function load_fedmsg(id, category) {
     $("#content_" + id).html('');
     entries = localStorage.getItem(id) ? localStorage.getItem(id) : [];
     entries = eval(entries);
+//    console.log(entries);
     if (entries == null || entries.length == 0) {
-        update_fedmsg(id, category)
+        update_fedmsg(id, category);
     } else {
         $("#message_" + id).text('Loading cached information');
         load_fedmsg_entries(entries, id);
@@ -147,10 +85,14 @@ function load_fedmsg(id, category) {
 
 function load_fedmsg_entries(entries, id){
     entries.map(function(entry) {
-        var content = parse_fedmsg(entry);
+        var content = parse_fedmsg(entry, id);
         if (content) {
             $("#content_" + id).append( content );
-            $("#content_" + id).listview('refresh');
+            if (id == 'planet') {
+                $("#content_" + id).collapsibleset('refresh');
+            } else {
+                $("#content_" + id).listview('refresh');
+            }
         }
     });
 }
@@ -165,14 +107,16 @@ function update_fedmsg(id, category, deploy) {
     $("#content_" + id).html('');
 
     get_fedmsg_msg(category, function(data, category) {
-        console.log("Get fedmsg: " + category);
+//        console.log("Get fedmsg: " + category);
+        
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
             return;
         }
+        
         var entries = data.raw_messages;
+        console.log(entries);
         localStorage.setItem(id, JSON.stringify(entries));
-        //console.log(entries[0]);
         if (deploy == true) {
             load_fedmsg_entries(entries, id);
             $("#message_" + id).text('');
@@ -183,11 +127,13 @@ function update_fedmsg(id, category, deploy) {
     // websocket, it should have set itself to null.  If
     // that happened, let's try reconnecting.
     if (socket == null) {
+        $("#message_" + id).text('Connection with fedmsg has been disconnected');
         setup_websocket_listener();
     }
 }
 
 function setup_websocket_listener() {
+    console.log("setup_websocket_listener");
     socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
@@ -195,10 +141,15 @@ function setup_websocket_listener() {
         socket.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
     };
     socket.onerror = function(e){socket=null;};
-    socket.onclose = function(e){socket=null;};
+    socket.onclose = function(e){
+        console.log("onclose");
+//        socket=null;
+        setup_websocket_listener();
+    };
 
     // Our main callback
     socket.onmessage = function(e){
+        console.log("onmessage");
         var data, json, topic, body, tokens, category, page_id, deploy, id_lookup;
 
         // Build a handy mapping of fedmsg categories to CSS ids.
@@ -206,6 +157,7 @@ function setup_websocket_listener() {
             bodhi: "updates",
             buildsys: "builds",
             pkgdb: "packages",
+            planet: "planet"
         }
 
         // Parse and extract the category from the websocket message.

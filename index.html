@@ -17,26 +17,27 @@
       $(function () {
         /* Refresh buttons */
         $('#refresh_planet').bind("click", function () {
-          update_planet();
+//          console.log('refresh planet');
+          update_fedmsg("planet", "planet");
         });
         $('#refresh_updates').bind("click", function () {
-          console.log('refresh updates');
+//          console.log('refresh updates');
           update_fedmsg("updates", "bodhi");
         });
         $('#refresh_builds').bind("click", function () {
-          console.log('refresh builds');
+//          console.log('refresh builds');
           update_fedmsg("builds", "buildsys");
         });
         $('#refresh_meetings').bind("click", function () {
-          console.log('refresh meetings');
+//          console.log('refresh meetings');
         });
         $('#refresh_packages').bind("click", function () {
-          console.log('refresh packages');
+//          console.log('refresh packages');
           update_fedmsg("packages", "pkgdb");
         });
 
         $('#refresh_all').bind("click", function () {
-          update_planet(false);
+          update_fedmsg("planet", "planet", false);
           update_fedmsg("updates", "bodhi", false);
           update_fedmsg("builds", "buildsys", false);
           update_fedmsg("packages", "pkgdb", false);
@@ -47,7 +48,7 @@
         /* Clear buttons */
         $('#clear_planet').bind("click", function () {
           $("#content_planet").html('');
-          localStorage.planet_entries = null;
+            localStorage.setItem('planet', null);
           $("#message_planet").text('Cache cleared');
         });
         $('#clear_updates').bind("click", function () {
@@ -72,7 +73,8 @@
         });
 
         $('#clear_all').bind("click", function () {
-          localStorage.planet_entries = null;
+//          localStorage.planet_entries = null;
+          localStorage.setItem('planet', null);
           localStorage.setItem('updates', null);
           localStorage.setItem('packages', null);
           localStorage.setItem('builds', null);
@@ -83,7 +85,7 @@
           var request = navigator.mozApps.getSelf();
           request.onsuccess = function() {
             if (!this.result) {
-              console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
+//            console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
               request = navigator.mozApps.install(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
               request.onerror = function() {
                 console.log("Install failed: " + this.error.name);
@@ -98,18 +100,19 @@
         $("#message_home").text('');
         var page_id = $.mobile.activePage.attr("id");
         if (page_id == 'planet_page') {
-          load_planet();
+//          console.log('load planet');
+          load_fedmsg('planet', 'planet');
         } else if (page_id == 'updates_page') {
-          console.log('load updates');
+//          console.log('load updates');
           load_fedmsg('updates', 'bodhi');
         } else if (page_id == 'builds_page') {
-          console.log('load builds');
+//          console.log('load builds');
           load_fedmsg('builds', 'buildsys');
         } else if (page_id == 'packages_page') {
-          console.log('load packages');
+//          console.log('load packages');
           load_fedmsg('packages', 'pkgdb');
         } else if (page_id == 'meetings_page') {
-          console.log('load meetings');
+//          console.log('load meetings');
         }
       });
 
