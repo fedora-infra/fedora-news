@@ -56,10 +56,8 @@ function parse_fedmsg(entry, id) {
     if (id == 'planet') {
         content = '<div data-role="collapsible"> '
                     + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
-                    //+ '<h3>' + entry.msg.post.title + '</h3>'
                     + '<a data-role="button" data-theme="c" data-icon="grid" href="' 
                     + entry.meta.link +'">Source</a><br />'
-                    //+ (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
                     + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
                 '</div>';
     } else {
@@ -75,7 +73,6 @@ function load_fedmsg(id, category) {
     $("#content_" + id).html('');
     entries = localStorage.getItem(id) ? localStorage.getItem(id) : [];
     entries = eval(entries);
-//    console.log(entries);
     if (entries == null || entries.length == 0) {
         update_fedmsg(id, category);
     } else {
@@ -108,8 +105,6 @@ function update_fedmsg(id, category, deploy) {
     $("#content_" + id).html('');
 
     get_fedmsg_msg(category, function(data, category) {
-//        console.log("Get fedmsg: " + category);
-        
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
             return;
@@ -133,7 +128,6 @@ function update_fedmsg(id, category, deploy) {
 }
 
 function setup_websocket_listener() {
-//    console.log("setup_websocket_listener");
     socket = new WebSocket("wss://hub.fedoraproject.org:9939");
 
     socket.onopen = function(e){
@@ -142,14 +136,12 @@ function setup_websocket_listener() {
     };
     socket.onerror = function(e){socket=null;};
     socket.onclose = function(e){
-//        console.log("onclose");
 //        socket=null;
         setup_websocket_listener();
     };
 
     // Our main callback
     socket.onmessage = function(e){
-//        console.log("onmessage");
         var data, json, topic, body, tokens, category, page_id, deploy, id_lookup;
 
         // Build a handy mapping of fedmsg categories to CSS ids.
