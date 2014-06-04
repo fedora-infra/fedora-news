@@ -30,6 +30,7 @@
         });
         $('#refresh_meetings').bind("click", function () {
 //          console.log('refresh meetings');
+		  update_fedmsg("meetings", "meetings");
         });
         $('#refresh_packages').bind("click", function () {
 //          console.log('refresh packages');
@@ -41,6 +42,7 @@
           update_fedmsg("updates", "bodhi", false);
           update_fedmsg("builds", "buildsys", false);
           update_fedmsg("packages", "pkgdb", false);
+		  update_fedmsg("meetings", "fedocal", false);
           $("#message_home").text('Cache refreshed');
         });
 
@@ -78,6 +80,7 @@
           localStorage.setItem('updates', null);
           localStorage.setItem('packages', null);
           localStorage.setItem('builds', null);
+		  localStorage.setItem('meetings', null);
           $("#message_home").text('Cache clear');
         });
 
@@ -113,6 +116,7 @@
           load_fedmsg('packages', 'pkgdb');
         } else if (page_id == 'meetings_page') {
 //          console.log('load meetings');
+		  load_fedmsg('meetings', 'fedocal');
         }
       });
 
@@ -191,21 +195,36 @@
       </div><!-- /content -->
     </section>
 
+	<!--
     <section id="meetings_page" data-role="page">
       <div data-role="header">
           <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
         <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_meetings'>Refresh</a>
           <h1>Coming meetings</h1>
-      </div><!-- /header -->
+      </div>-- /header --
 
       <div data-role="content">
         <p id="message_meetings">Check the coming meetings</p>
         <ul data-role="listview" data-theme="c" data-content-theme="d" id="content_meetings">
         </ul>
         <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_meetings'>clear</a>
-      </div><!-- /content -->
+      </div>-- /content --
     </section>
-  
+	-->
+	<section id="meetings_page" data-role="page">
+      <div data-role="header">
+        <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+        <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" id='refresh_meetings'>Refresh</a>
+        <h1>Fedora meetings</h1>
+      </div><!-- /header -->
+      <div data-role="content">
+        <p id="message_meetings">Check the latest posts of the meetings</p>
+        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_meetings">
+        </div>
+        <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_meetings'>clear</a>
+      </div>
+    </section>
+	
     <section id="builds_page" data-role="page">
       <div data-role="header">
         <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
