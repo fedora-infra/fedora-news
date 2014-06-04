@@ -30,7 +30,7 @@
         });
         $('#refresh_meetings').bind("click", function () {
 //          console.log('refresh meetings');
-		  update_fedmsg("meetings", "meetings");
+		  update_fedmsg("meetings", "fedocal");
         });
         $('#refresh_packages').bind("click", function () {
 //          console.log('refresh packages');
@@ -65,7 +65,8 @@
         });
         $('#clear_meetings').bind("click", function () {
           $("#content_meetings").html('');
-          localStorage.meeting_entries = null;
+          //localStorage.meeting_entries = null;
+		  localStorage.setItem('meetings', null);
           $("#message_meetings").text('Cache cleared');
         });
         $('#clear_builds').bind("click", function () {

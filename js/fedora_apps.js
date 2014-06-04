@@ -53,7 +53,6 @@ var get_fedmsg_msg = function(category, callback) {
 function parse_fedmsg(entry, id) {
     var content = null;
     var date = new Date(entry.timestamp * 1000).toLocaleString();
-    console.log(entry);
 	switch(id) {
 		case 'planet':
 			content = '<div data-role="collapsible"> '
@@ -138,6 +137,7 @@ function update_fedmsg(id, category, deploy) {
     $("#content_" + id).html('');
 
     get_fedmsg_msg(category, function(data, category) {
+        
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
             return;
@@ -169,7 +169,6 @@ function setup_websocket_listener() {
     };
     socket.onerror = function(e){socket=null;};
     socket.onclose = function(e){
-//        socket=null;
         setup_websocket_listener();
     };
 
@@ -183,7 +182,7 @@ function setup_websocket_listener() {
             buildsys: "builds",
             pkgdb: "packages",
             planet: "planet",
-			meetings: "meetings"
+			fedocal: "meetings"
         }
 
         // Parse and extract the category from the websocket message.
