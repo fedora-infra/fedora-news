@@ -182,7 +182,7 @@ function setup_websocket_listener() {
             buildsys: "builds",
             pkgdb: "packages",
             planet: "planet",
-			fedocal: "meetings"
+            fedocal: "meetings"
         }
 
         // Parse and extract the category from the websocket message.
