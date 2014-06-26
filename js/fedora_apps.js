@@ -53,17 +53,49 @@ var get_fedmsg_msg = function(category, callback) {
 function parse_fedmsg(entry, id) {
     var content = null;
     var date = new Date(entry.timestamp * 1000).toLocaleString();
-    if (id == 'planet') {
-        content = '<div data-role="collapsible"> '
-                    + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
-                    + '<a data-role="button" data-theme="c" data-icon="grid" href="' 
-                    + entry.meta.link +'">Source</a><br />'
-                    + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
-                '</div>';
-    } else {
-        content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
-                  + entry.meta.subtitle+ ' ('
-                  + date + ')</a></li>';
+  switch(id) {
+    case 'planet':
+      content = '<div data-role="collapsible"> '
+            + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
+            //+ '<h3>' + entry.msg.post.title + '</h3>'
+            + '<a data-role="button" data-theme="c" data-icon="grid" href="' 
+            + entry.meta.link +'">Source</a><br />'
+            //+ (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
+            + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
+          '</div>';
+      break;
+    case 'meetings':
+      var meeting = entry.msg.meeting;
+      var calendar = entry.msg.calendar;
+      var organizedBy = '';
+      for (i=0; i<meeting.meeting_manager.length; i++) {
+        if (organizedBy != '') organizedBy += ', '
+        organizedBy += meeting.meeting_manager[i];
+      }
+      content = '<div data-role="collapsible"> '
+            + '<h3><span class="lbl">Calendar:</span> ' + entry.msg.calendar.calendar_name + '<br/><span class="lbl">Meeting:</span> ' + entry.msg.meeting.meeting_name + '</h3>'
+            + '<a data-role="button" data-theme="c" data-icon="grid" href="' + entry.meta.link +'">Source</a><br />'
+            + '<section>'
+              + '<header>'
+                + '<h2><a href="https://apps.fedoraproject.org/calendar/' + calendar.calendar_name + '/">' + calendar.calendar_name + '</a></h2>'
+                + '<p>' + entry.msg.meeting.meeting_name + ' details below</p>'
+              + '</header>'
+              + '<p>You are kindly invited to join to the following meeting:</p>'
+              + '<h4>' + entry.meta.subtitle + '</h4>'
+              + '<p>Location: ' + meeting.meeting_location + '</p>'
+              + '<p>Displayed in: ' + meeting.meeting_timezone + '</p>'
+              + '<ul>'
+                + '<li>Start: ' + meeting.meeting_date + ' - ' + meeting.meeting_time_start + ' ' + meeting.meeting_timezone + '</li>'
+                + '<li>End: ' + meeting.meeting_date_end + ' - ' + meeting.meeting_time_stop + ' ' + meeting.meeting_timezone + '</li>'
+              + '</ul>'
+              + '<p>This meeting is organized by ' + organizedBy + '</p>'
+            + '</section>'
+          + '</div>';
+      break;
+    default:
+      content = '<li> <a href="' + entry.meta.link + '" target="_blank">' 
+            + entry.meta.subtitle+ ' ('
+            + date + ')</a></li>';
     }
     
     return content;
@@ -86,7 +118,7 @@ function load_fedmsg_entries(entries, id){
         var content = parse_fedmsg(entry, id);
         if (content) {
             $("#content_" + id).append( content );
-            if (id == 'planet') {
+            if (id == 'planet' || id == 'meetings') {
                 $("#content_" + id).collapsibleset('refresh');
             } else {
                 $("#content_" + id).listview('refresh');
@@ -105,6 +137,7 @@ function update_fedmsg(id, category, deploy) {
     $("#content_" + id).html('');
 
     get_fedmsg_msg(category, function(data, category) {
+        
         if (!data || data.total == 0) {
             $("#message_" + id).text('Could not retrieve information from fedmsg');
             return;
@@ -136,7 +169,6 @@ function setup_websocket_listener() {
     };
     socket.onerror = function(e){socket=null;};
     socket.onclose = function(e){
-//        socket=null;
         setup_websocket_listener();
     };
 
@@ -149,7 +181,8 @@ function setup_websocket_listener() {
             bodhi: "updates",
             buildsys: "builds",
             pkgdb: "packages",
-            planet: "planet"
+            planet: "planet",
+            fedocal: "meetings"
         }
 
         // Parse and extract the category from the websocket message.
