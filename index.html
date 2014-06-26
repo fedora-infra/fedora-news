@@ -1,229 +1,229 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Fedora news apps</title>
-	<link rel="shortcut icon" type="image/vnd.microsoft.icon"
-	  href="//fedoraproject.org/static/images/favicon.ico" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-	<link rel="apple-touch-icon" href="img/Fedora.png"/>
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/git/jquery.mobile-git.css" type="text/css">
-	<link rel="stylesheet" href="css/main.css" type="text/css"/>
-	<script src="http://code.jquery.com/jquery-1.9.1.js"
-		type="text/javascript"></script>
-	<script src="http://code.jquery.com/mobile/git/jquery.mobile-git.js"
-		type="text/javascript"></script>
-	<script src="js/fedora_apps.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		$(function () {
-			/* Refresh buttons */
-			$('#refresh_planet').bind("click", function () {
-	//          console.log('refresh planet');
-				update_fedmsg("planet", "planet");
-			});
-			$('#refresh_updates').bind("click", function () {
-	//          console.log('refresh updates');
-				update_fedmsg("updates", "bodhi");
-			});
-			$('#refresh_builds').bind("click", function () {
-	//          console.log('refresh builds');
-				update_fedmsg("builds", "buildsys");
-			});
-			$('#refresh_meetings').bind("click", function () {
-	//          console.log('refresh meetings');
-				update_fedmsg("meetings", "fedocal");
-			});
-			$('#refresh_packages').bind("click", function () {
-	//          console.log('refresh packages');
-			  update_fedmsg("packages", "pkgdb");
-			});
+    <title>Fedora news apps</title>
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon"
+        href="//fedoraproject.org/static/images/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="apple-touch-icon" href="img/Fedora.png"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/git/jquery.mobile-git.css" type="text/css">
+    <link rel="stylesheet" href="css/main.css" type="text/css"/>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"
+        type="text/javascript"></script>
+    <script src="http://code.jquery.com/mobile/git/jquery.mobile-git.js"
+        type="text/javascript"></script>
+    <script src="js/fedora_apps.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            /* Refresh buttons */
+            $('#refresh_planet').bind("click", function () {
+                // console.log('refresh planet');
+                update_fedmsg("planet", "planet");
+            });
+            $('#refresh_updates').bind("click", function () {
+                // console.log('refresh updates');
+                update_fedmsg("updates", "bodhi");
+            });
+            $('#refresh_builds').bind("click", function () {
+                // console.log('refresh builds');
+                update_fedmsg("builds", "buildsys");
+            });
+            $('#refresh_meetings').bind("click", function () {
+                // console.log('refresh meetings');
+                update_fedmsg("meetings", "fedocal");
+            });
+            $('#refresh_packages').bind("click", function () {
+                // console.log('refresh packages');
+                update_fedmsg("packages", "pkgdb");
+            });
 
-			$('#refresh_all').bind("click", function () {
-				update_fedmsg("planet", "planet", false);
-				update_fedmsg("updates", "bodhi", false);
-				update_fedmsg("builds", "buildsys", false);
-				update_fedmsg("packages", "pkgdb", false);
-				update_fedmsg("meetings", "fedocal", false);
-				$("#message_home").text('Cache refreshed');
-			});
+            $('#refresh_all').bind("click", function () {
+                update_fedmsg("planet", "planet", false);
+                update_fedmsg("updates", "bodhi", false);
+                update_fedmsg("builds", "buildsys", false);
+                update_fedmsg("packages", "pkgdb", false);
+                update_fedmsg("meetings", "fedocal", false);
+                $("#message_home").text('Cache refreshed');
+            });
 
 
-			/* Clear buttons */
-			$('#clear_planet').bind("click", function () {
-				$("#content_planet").html('');
-				localStorage.setItem('planet', null);
-				$("#message_planet").text('Cache cleared');
-			});
-			$('#clear_updates').bind("click", function () {
-				$("#content_updates").html('');
-				localStorage.setItem('updates', null);
-				$("#message_updates").text('Cache cleared');
-			});
-			$('#clear_packages').bind("click", function () {
-				$("#content_packages").html('');
-				localStorage.setItem('packages', null);
-				$("#message_packages").text('Cache cleared');
-			});
-			$('#clear_meetings').bind("click", function () {
-				$("#content_meetings").html('');
-				//localStorage.meeting_entries = null;
-				localStorage.setItem('meetings', null);
-				$("#message_meetings").text('Cache cleared');
-			});
-			$('#clear_builds').bind("click", function () {
-				$("#content_builds").html('');
-				localStorage.setItem('builds', null);
-				$("#message_builds").text('Cache cleared');
-			});
+            /* Clear buttons */
+            $('#clear_planet').bind("click", function () {
+                $("#content_planet").html('');
+                localStorage.setItem('planet', null);
+                $("#message_planet").text('Cache cleared');
+            });
+            $('#clear_updates').bind("click", function () {
+                $("#content_updates").html('');
+                localStorage.setItem('updates', null);
+                $("#message_updates").text('Cache cleared');
+            });
+            $('#clear_packages').bind("click", function () {
+                $("#content_packages").html('');
+                localStorage.setItem('packages', null);
+                $("#message_packages").text('Cache cleared');
+            });
+            $('#clear_meetings').bind("click", function () {
+                $("#content_meetings").html('');
+                //localStorage.meeting_entries = null;
+                localStorage.setItem('meetings', null);
+                $("#message_meetings").text('Cache cleared');
+            });
+            $('#clear_builds').bind("click", function () {
+                $("#content_builds").html('');
+                localStorage.setItem('builds', null);
+                $("#message_builds").text('Cache cleared');
+            });
 
-			$('#clear_all').bind("click", function () {
-				// localStorage.planet_entries = null;
-				localStorage.setItem('planet', null);
-				localStorage.setItem('updates', null);
-				localStorage.setItem('packages', null);
-				localStorage.setItem('builds', null);
-				localStorage.setItem('meetings', null);
-				$("#message_home").text('Cache clear');
-			});
+            $('#clear_all').bind("click", function () {
+                // localStorage.planet_entries = null;
+                localStorage.setItem('planet', null);
+                localStorage.setItem('updates', null);
+                localStorage.setItem('packages', null);
+                localStorage.setItem('builds', null);
+                localStorage.setItem('meetings', null);
+                $("#message_home").text('Cache clear');
+            });
 
-			if (navigator.mozApps) {
-				var request = navigator.mozApps.getSelf();
-				request.onsuccess = function() {
-					if (!this.result) {
-						//console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
-						request = navigator.mozApps.install(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
-						request.onerror = function() {
-							console.log("Install failed: " + this.error.name);
-						};
-					}
-				};
-			}
-		});
+            if (navigator.mozApps) {
+                var request = navigator.mozApps.getSelf();
+                request.onsuccess = function() {
+                    if (!this.result) {
+                        //console.log(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
+                        request = navigator.mozApps.install(location.protocol + "//" + location.host + location.pathname + "manifest.webapp");
+                        request.onerror = function() {
+                            console.log("Install failed: " + this.error.name);
+                        };
+                    }
+                };
+            }
+        });
 
-		/* Load content of page change */
-		$(document).on("pagechange", function () {
-			$("#message_home").text('');
-			var page_id = $.mobile.activePage.attr("id");
-			if (page_id == 'planet_page') {
-	//          console.log('load planet');
-				load_fedmsg('planet', 'planet');
-			} else if (page_id == 'updates_page') {
-	//          console.log('load updates');
-				load_fedmsg('updates', 'bodhi');
-			} else if (page_id == 'builds_page') {
-	//          console.log('load builds');
-				load_fedmsg('builds', 'buildsys');
-			} else if (page_id == 'packages_page') {
-	//          console.log('load packages');
-				load_fedmsg('packages', 'pkgdb');
-			} else if (page_id == 'meetings_page') {
-	//          console.log('load meetings');
-				load_fedmsg('meetings', 'fedocal');
-			}
-		});
+        /* Load content of page change */
+        $(document).on("pagechange", function () {
+            $("#message_home").text('');
+            var page_id = $.mobile.activePage.attr("id");
+            if (page_id == 'planet_page') {
+                // console.log('load planet');
+                load_fedmsg('planet', 'planet');
+            } else if (page_id == 'updates_page') {
+                // console.log('load updates');
+                load_fedmsg('updates', 'bodhi');
+            } else if (page_id == 'builds_page') {
+                // console.log('load builds');
+                load_fedmsg('builds', 'buildsys');
+            } else if (page_id == 'packages_page') {
+                // console.log('load packages');
+                load_fedmsg('packages', 'pkgdb');
+            } else if (page_id == 'meetings_page') {
+                // console.log('load meetings');
+                load_fedmsg('meetings', 'fedocal');
+            }
+        });
 
-		$(document).ready(setup_websocket_listener);
-	</script>
+        $(document).ready(setup_websocket_listener);
+    </script>
 
 </head>
 <body>
-	<section id="index_page" data-role="page">
-		<div data-role="header">
-			<h1>Fedora News</h1>
-		</div><!-- /header -->
-		<div data-role="content">
-			<p id="message_home"></p>
-			<a id="home_planet" href="#planet_page" class="ui-block-a">
-				<img src="img/planet.png" alt="Fedora Planet" />
-			</a>
-			<a id="home_builds" href="#packages_page" class="ui-block-b">
-				<img src="img/packages.png" alt="Latest packages" />
-			</a>
-			<a id="home_builds" href="#builds_page" class="ui-block-a">
-				<img src="img/builds.png" alt="Latest builds" />
-			</a>
-			<a id="home_updates" href="#updates_page" class="ui-block-b">
-				<img src="img/updates.png" alt="Latest updates" />
-			</a>
-			<a id="home_meetings" href="#meetings_page" class="ui-block-a">
-				<img src="img/meetings.png" alt="Coming meetings" />
-			</a>
-			<a data-role="button" data-theme="c" data-icon="refresh" href='#' id='refresh_all'>Refresh all</a>
-			<a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
-		</div>
-	</section>
+    <section id="index_page" data-role="page">
+        <div data-role="header">
+            <h1>Fedora News</h1>
+        </div><!-- /header -->
+        <div data-role="content">
+            <p id="message_home"></p>
+            <a id="home_planet" href="#planet_page" class="ui-block-a">
+                <img src="img/planet.png" alt="Fedora Planet" />
+            </a>
+            <a id="home_builds" href="#packages_page" class="ui-block-b">
+                <img src="img/packages.png" alt="Latest packages" />
+            </a>
+            <a id="home_builds" href="#builds_page" class="ui-block-a">
+                <img src="img/builds.png" alt="Latest builds" />
+            </a>
+            <a id="home_updates" href="#updates_page" class="ui-block-b">
+                <img src="img/updates.png" alt="Latest updates" />
+            </a>
+            <a id="home_meetings" href="#meetings_page" class="ui-block-a">
+                <img src="img/meetings.png" alt="Coming meetings" />
+            </a>
+            <a data-role="button" data-theme="c" data-icon="refresh" href='#' id='refresh_all'>Refresh all</a>
+            <a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
+        </div>
+    </section>
 
-	<section id="planet_page" data-role="page">
-		<div data-role="header">
-			<a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
-			<a data-role="button" data-theme="c" data-icon="refresh" class="home_button" id='refresh_planet'>Refresh</a>
-			<h1>Fedora Planet</h1>
-		</div><!-- /header -->
-		<div data-role="content">
-			<p id="message_planet">Check the latest posts of the planet</p>
-			<div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_planet">
-			</div>
-			<a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_planet'>clear</a>
-		</div>
-	</section>
+    <section id="planet_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" id='refresh_planet'>Refresh</a>
+            <h1>Fedora Planet</h1>
+        </div><!-- /header -->
+        <div data-role="content">
+            <p id="message_planet">Check the latest posts of the planet</p>
+            <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_planet">
+            </div>
+            <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_planet'>clear</a>
+        </div>
+    </section>
 
-	<section id="updates_page" data-role="page">
-		<div data-role="header">
-			<a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
-			<a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_updates'>Refresh</a>
-			<h1>Latest updates</h1>
-		</div><!-- /header -->
+    <section id="updates_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_updates'>Refresh</a>
+            <h1>Latest updates</h1>
+        </div><!-- /header -->
 
-		<div data-role="content">
-			<p id="message_updates">Check the latest updates information</p>
-			<ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_updates">
-			</ul>
-			<a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_updates'>clear</a>
-		</div><!-- /content -->
-	</section>
+        <div data-role="content">
+            <p id="message_updates">Check the latest updates information</p>
+            <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_updates">
+            </ul>
+            <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_updates'>clear</a>
+        </div><!-- /content -->
+    </section>
 
-	<section id="packages_page" data-role="page">
-		<div data-role="header">
-			<a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
-			<a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_packages'>Refresh</a>
-			<h1>Latest packages</h1>
-		</div><!-- /header -->
+    <section id="packages_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_packages'>Refresh</a>
+            <h1>Latest packages</h1>
+        </div><!-- /header -->
 
-		<div data-role="content">
-			<p id="message_packages">Check the latest packages information</p>
-			<ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true"  id="content_packages">
-			</ul>
-			<a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_packages'>clear</a>
-		</div><!-- /content -->
-	</section>
+        <div data-role="content">
+            <p id="message_packages">Check the latest packages information</p>
+            <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true"    id="content_packages">
+            </ul>
+            <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_packages'>clear</a>
+        </div><!-- /content -->
+    </section>
 
-	<section id="meetings_page" data-role="page">
-		<div data-role="header">
-			<a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
-			<a data-role="button" data-theme="c" data-icon="refresh" class="home_button" id='refresh_meetings'>Refresh</a>
-			<h1>Fedora meetings</h1>
-		</div><!-- /header -->
-		<div data-role="content">
-			<p id="message_meetings">Check the latest posts of the meetings</p>
-			<div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_meetings">
-			</div>
-			<a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_meetings'>clear</a>
-		</div>
-	</section>
+    <section id="meetings_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" id='refresh_meetings'>Refresh</a>
+            <h1>Fedora meetings</h1>
+        </div><!-- /header -->
+        <div data-role="content">
+            <p id="message_meetings">Check the latest posts of the meetings</p>
+            <div data-role="collapsible-set" data-theme="c" data-content-theme="d" id="content_meetings">
+            </div>
+            <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_meetings'>clear</a>
+        </div>
+    </section>
 
-	<section id="builds_page" data-role="page">
-		<div data-role="header">
-			<a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
-			<a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_builds'>Refresh</a>
-			<h1>Latest builds</h1>
-		</div><!-- /header -->
+    <section id="builds_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <a data-role="button" data-theme="c" data-icon="refresh" class="home_button" href='#' id='refresh_builds'>Refresh</a>
+            <h1>Latest builds</h1>
+        </div><!-- /header -->
 
-		<div data-role="content">
-			<p id="message_builds">Check the latest builds information</p>
-			<ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_builds">
-			</ul>
-			<a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_builds'>clear</a>
-		</div><!-- /content -->
-	</section>
+        <div data-role="content">
+            <p id="message_builds">Check the latest builds information</p>
+            <ul data-role="listview" data-theme="c" data-content-theme="d" data-inset="true" id="content_builds">
+            </ul>
+            <a data-role="button" data-theme="c" data-icon="delete" class="home_button" href='#' id='clear_builds'>clear</a>
+        </div><!-- /content -->
+    </section>
 
 </body>
 </html>
