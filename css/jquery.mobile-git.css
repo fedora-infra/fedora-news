@@ -1469,8 +1469,8 @@ div.ui-mobile-viewport {
 .ui-footer:empty {
 	min-height: 2.6875em;
 }
-.ui-header .ui-title,
-.ui-footer .ui-title {
+.ui-header .ui-title, .fedora_icon
+.ui-footer .ui-title .fedora_icon {
 	font-size: 1em;
 	min-height: 1.1em;
 	text-align: center;
@@ -1482,6 +1482,21 @@ div.ui-mobile-viewport {
 	white-space: nowrap;
 	outline: 0 !important;
 }
+
+.fedora_icon {
+  
+    position: absolute;
+    left: 40%;
+    margin: auto;
+    top: 10%;
+    border-width:auto;
+    display: block;
+    clear: left;  
+}
+
+
+
+
 .ui-footer .ui-title {
 	margin: 0 1em;
 }
