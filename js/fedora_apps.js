@@ -56,13 +56,13 @@ function parse_fedmsg(entry, id) {
   switch(id) {
     case 'planet':
       content = '<div data-role="collapsible"> '
+            
+            // Post title 
             + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
-            //+ '<h3>' + entry.msg.post.title + '</h3>'
-            + '<a data-role="button" data-theme="c" data-icon="grid" href="' 
-            + entry.meta.link +'">Source</a><br />'
-            //+ (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
-            + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
-          '</div>';
+            
+            // Content with the news source at the end.
+            + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) + '<a data-role="button" data-theme="c" data-icon="grid" href="' + entry.meta.link +'"> Source...</a><br />'
+            '</div>';
       break;
     case 'meetings':
       var meeting = entry.msg.meeting;

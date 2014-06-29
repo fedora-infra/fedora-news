@@ -1485,13 +1485,14 @@ div.ui-mobile-viewport {
 
 .fedora_icon {
   
+    max-width: 500px;
+    max-height: 300px;
+    min-height: 0px; 
     position: absolute;
     left: 40%;
     margin: auto;
     top: 10%;
-    border-width:auto;
     display: block;
-    clear: left;  
 }
 
 
@@ -2883,6 +2884,7 @@ li.ui-block-e {
 	border-top-width: 0;
 	border-bottom-width: 1px;
 	border-style: solid;
+	background-color: white;
 }
 .ui-collapsible-inset.ui-collapsible-themed-content .ui-collapsible-content {
 	border-left-width: 1px;
@@ -4717,3 +4719,4 @@ html .ui-popup .ui-field-contain > label + .ui-flipswitch {
 	position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	padding: .2em;
 }
+
