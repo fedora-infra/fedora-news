@@ -38,7 +38,6 @@ var hostname = (function () {
 
 var init_nb_notification = function(id) {
   var res = 0;
-  console.log("init_nb_notification : " + id);
   res = (id == -1 || id == "planet") ? localStorage.setItem('notify_counter__planet', 0) : 1;
   res = (id == -1 || id == "updates") ? localStorage.setItem('notify_counter_updates', 0) : 2;
   res = (id == -1 || id == "packages") ? localStorage.setItem('notify_counter_packages', 0) : 3;
@@ -48,6 +47,10 @@ var init_nb_notification = function(id) {
 }
 
 function find_difference(newEntries, oldEntries) {
+  if (typeof(olEntries) === 'undefined') {
+    return newEntries.length;
+  }
+  
   // TODO
   // find number of different entries
   return 1;
@@ -62,7 +65,6 @@ function update_notification(category, nb_notification) {
     notify_counter = nb_notification_from_storage + nb_notification;
   }
   localStorage.setItem('notify_counter_' + category, notify_counter);
-  console.log("update_notification : " + notify_counter);
   if (notify_counter > 0) {
     $("#home_" + category + ">span[class='nb_notification']").html(notify_counter);
   } else {
@@ -90,13 +92,12 @@ function parse_fedmsg(entry, id) {
   var date = new Date(entry.timestamp * 1000).toLocaleString();
   switch(id) {
     case 'planet':
+      console.log(entry.msg.post.content);
       content = '<div data-role="collapsible"> '
                 + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
-                //+ '<h3>' + entry.msg.post.title + '</h3>'
                 + '<a data-role="button" data-theme="c" data-icon="grid" href="'
                 + entry.meta.link +'">Source</a><br />'
-                //+ (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : entry.msg.post.content[0].value) +
-                + (entry.msg.post.content ? entry.msg.post.content[0].value : entry.msg.post.summary_detail.value) +
+                + (entry.msg.post.content ? entry.msg.post.content[0].value : (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : '')) +
               '</div>';
       break;
     case 'meetings':
