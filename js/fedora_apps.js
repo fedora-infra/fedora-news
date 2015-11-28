@@ -59,16 +59,18 @@ function find_difference(newEntries, oldEntries) {
 function update_notification(category, nb_notification) {
   var notify_counter = 0;
   nb_notification_from_storage = parseInt(localStorage.getItem('notify_counter_' + category) ? localStorage.getItem('notify_counter_' + category) : 0);
-  if (nb_notification_from_storage >= 20){
-    notify_counter = 20;
+  if (nb_notification_from_storage >= rows_per_page){
+    notify_counter = rows_per_page;
   } else {
     notify_counter = nb_notification_from_storage + nb_notification;
   }
   localStorage.setItem('notify_counter_' + category, notify_counter);
   if (notify_counter > 0) {
-    $("#home_" + category + ">span[class='nb_notification']").html(notify_counter);
+	$("#home_" + category + ">[class='nb_notification']").css('display', 'inline');
+    $("#home_" + category + ">[class='nb_notification']>text").html(notify_counter);
   } else {
-    $("#home_" + category + ">span[class='nb_notification']").html("");
+    $("#home_" + category + ">[class='nb_notification']>text").html("");
+    $("#home_" + category + ">[class='nb_notification']").css('display', 'none');
   }
 }
 
