@@ -90,17 +90,27 @@ var get_fedmsg_msg = function(category, callback) {
 };
 
 function parse_fedmsg(entry, id) {
-  var content = null;
+  var html_content = null, content = null;
   var date = new Date(entry.timestamp * 1000).toLocaleString();
   switch(id) {
     case 'planet':
       console.log(entry.msg.post.content);
-      content = '<div data-role="collapsible"> '
+      html_content = '<div data-role="collapsible"> '
                 + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
                 + '<a data-role="button" data-theme="c" data-icon="grid" href="'
                 + entry.meta.link +'">Source</a><br />'
                 + (entry.msg.post.content ? entry.msg.post.content[0].value : (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : '')) +
               '</div>';
+      /*
+      content = {
+        entry_msg_name: entry.msg.name,
+        entry_msg_post_title: entry_msg_post_title,
+        entry_meta_link: entry.meta.link,
+        entry_msg_post_content: (entry.msg.post.content ? entry.msg.post.content[0].value : (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : ''))
+      };
+      var source   = $("#entry-planet-template").html();
+      var template = Handlebars.compile(source);
+      */
       break;
     case 'meetings':
       var meeting = entry.msg.meeting;
@@ -110,7 +120,7 @@ function parse_fedmsg(entry, id) {
         if (organizedBy !== '') organizedBy += ', ';
         organizedBy += meeting.meeting_manager[i];
       }
-      content = '<div data-role="collapsible"> '
+      html_content = '<div data-role="collapsible"> '
                 + '<h3><span class="lbl">Calendar:</span> ' + entry.msg.calendar.calendar_name + '<br/><span class="lbl">Meeting:</span> ' + entry.msg.meeting.meeting_name + '</h3>'
                 + '<a data-role="button" data-theme="c" data-icon="grid" href="' + entry.meta.link +'">Source</a><br />'
                 + '<section>'
@@ -131,12 +141,13 @@ function parse_fedmsg(entry, id) {
               + '</div>';
       break;
     default:
-      content = '<li> <a href="' + entry.meta.link + '" target="_blank">'
+      html_content = '<li> <a href="' + entry.meta.link + '" target="_blank">'
                 + entry.meta.subtitle+ ' ('
                 + date + ')</a></li>';
   }
 
-  return content;
+  //var html_content = template(content);
+  return html_content;
 }
 
 function load_fedmsg(id, category) {
