@@ -47,7 +47,7 @@ var init_nb_notification = function(id) {
 }
 
 function find_difference(newEntries, oldEntries) {
-  if (typeof(olEntries) === 'undefined') {
+  if (typeof(oldEntries) === 'undefined') {
     return newEntries.length;
   }
   
@@ -66,7 +66,7 @@ function update_notification(category, nb_notification) {
   }
   localStorage.setItem('notify_counter_' + category, notify_counter);
   if (notify_counter > 0) {
-	$("#home_" + category + ">[class='nb_notification']").css('display', 'inline');
+    $("#home_" + category + ">[class='nb_notification']").css('display', 'inline');
     $("#home_" + category + ">[class='nb_notification']>text").html(notify_counter);
   } else {
     $("#home_" + category + ">[class='nb_notification']>text").html("");
@@ -90,27 +90,17 @@ var get_fedmsg_msg = function(category, callback) {
 };
 
 function parse_fedmsg(entry, id) {
-  var html_content = null, content = null;
+  var htmlContent = null, content = null, template = null, source = null;
   var date = new Date(entry.timestamp * 1000).toLocaleString();
   switch(id) {
     case 'planet':
-      console.log(entry.msg.post.content);
-      html_content = '<div data-role="collapsible"> '
-                + '<h3>' + entry.msg.name + ': ' + entry.msg.post.title + '</h3>'
-                + '<a data-role="button" data-theme="c" data-icon="grid" href="'
-                + entry.meta.link +'">Source</a><br />'
-                + (entry.msg.post.content ? entry.msg.post.content[0].value : (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : '')) +
-              '</div>';
-      /*
       content = {
         entry_msg_name: entry.msg.name,
-        entry_msg_post_title: entry_msg_post_title,
+        entry_msg_post_title: entry.msg.post.title,
         entry_meta_link: entry.meta.link,
         entry_msg_post_content: (entry.msg.post.content ? entry.msg.post.content[0].value : (entry.msg.post.summary_detail ? entry.msg.post.summary_detail.value : ''))
       };
-      var source   = $("#entry-planet-template").html();
-      var template = Handlebars.compile(source);
-      */
+      source = $("#entry-planet-template").html();
       break;
     case 'meetings':
       var meeting = entry.msg.meeting;
@@ -120,34 +110,33 @@ function parse_fedmsg(entry, id) {
         if (organizedBy !== '') organizedBy += ', ';
         organizedBy += meeting.meeting_manager[i];
       }
-      html_content = '<div data-role="collapsible"> '
-                + '<h3><span class="lbl">Calendar:</span> ' + entry.msg.calendar.calendar_name + '<br/><span class="lbl">Meeting:</span> ' + entry.msg.meeting.meeting_name + '</h3>'
-                + '<a data-role="button" data-theme="c" data-icon="grid" href="' + entry.meta.link +'">Source</a><br />'
-                + '<section>'
-                  + '<header>'
-                    + '<h2><a href="https://apps.fedoraproject.org/calendar/' + calendar.calendar_name + '/">' + calendar.calendar_name + '</a></h2>'
-                    + '<p>' + entry.msg.meeting.meeting_name + ' details below</p>'
-                  + '</header>'
-                  + '<p>You are kindly invited to join to the following meeting:</p>'
-                  + '<h4>' + entry.meta.subtitle + '</h4>'
-                  + '<p>Location: ' + meeting.meeting_location + '</p>'
-                  + '<p>Displayed in: ' + meeting.meeting_timezone + '</p>'
-                  + '<ul>'
-                    + '<li>Start: ' + meeting.meeting_date + ' - ' + meeting.meeting_time_start + ' ' + meeting.meeting_timezone + '</li>'
-                    + '<li>End: ' + meeting.meeting_date_end + ' - ' + meeting.meeting_time_stop + ' ' + meeting.meeting_timezone + '</li>'
-                  + '</ul>'
-                  + '<p>This meeting is organized by ' + organizedBy + '</p>'
-                + '</section>'
-              + '</div>';
+      content = {
+        entry_msg_calendar_calendar_name: entry.msg.calendar.calendar_name,
+        entry_msg_meeting_meeting_name: entry.msg.meeting.meeting_name,
+        entry_meta_link: entry.meta.link,
+        calendar_calendar_name: calendar.calendar_name,
+        entry_meta_subtitle: entry.meta.subtitle,
+        meeting_meeting_location: meeting.meeting_location,
+        meeting_meeting_timezone: meeting.meeting_timezone,
+        meeting_meeting_date: meeting.meeting_date,
+        meeting_meeting_date_end: meeting.meeting_date_end,
+        meeting_meeting_time_start : meeting.meeting_time_start,
+        meeting_meeting_time_stop: meeting.meeting_time_stop,
+        organizedBy: organizedBy
+      };
+      source = $("#entry-meeting-template").html();
       break;
     default:
-      html_content = '<li> <a href="' + entry.meta.link + '" target="_blank">'
-                + entry.meta.subtitle+ ' ('
-                + date + ')</a></li>';
+      content = {
+        entry_meta_link: entry.meta.link,
+        entry_meta_subtitle: entry.meta.subtitle,
+        date: date
+      };
+      source = $("#entry-default-template").html();
   }
-
-  //var html_content = template(content);
-  return html_content;
+  template = Handlebars.compile(source);
+  htmlContent = template(content);
+  return htmlContent;
 }
 
 function load_fedmsg(id, category) {
