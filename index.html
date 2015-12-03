@@ -4,7 +4,8 @@
     <title>Fedora news apps</title>
     <link rel="shortcut icon" type="image/vnd.microsoft.icon"
         href="//fedoraproject.org/static/images/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="apple-touch-icon" href="img/Fedora.png"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/git/jquery.mobile-git.css" type="text/css">
     <link rel="stylesheet" href="css/main.css" type="text/css"/>
@@ -18,7 +19,7 @@
     <script id="entry-default-template" type="text/x-handlebars-template>
       <div class="entry-default">
         <li>
-          <a href="{{entry.meta.link}}" target="_blank">{{entry_meta_subtitle}}({{date}})</a>
+          <a href="{{entry_meta_link}}" target="_blank">{{entry_meta_subtitle}}({{date}})</a>
         </li>
       </div>
     </script>
@@ -33,10 +34,10 @@
     <script id="entry-meeting-template" type="text/x-handlebars-template">
       <div data-role="collapsible" class="entry_meeting">
         <h3><span class="lbl">Calendar:</span>{{entry_msg_calendar_calendar_name}}<br/><span class="lbl">Meeting:</span>{{entry_msg_meeting_meeting_name}}</h3>
-        <a data-role="button" data-theme="c" data-icon="grid" href="' + entry.meta.link +'">Source</a><br />
+        <a data-role="button" data-theme="c" data-icon="grid" href="{{entry_meta_link}}">Source</a><br />
         <section>
           <header>
-            <h2><a href="https://apps.fedoraproject.org/calendar/{{calendar.calendar_name}}/">{{calendar_calendar_name}}</a></h2>
+            <h2><a href="https://apps.fedoraproject.org/calendar/{{calendar_calendar_name}}/" target="_blank">{{calendar_calendar_name}}</a></h2>
             <p>{{entry_msg_meeting_meeting_name}} details below</p>
           </header>
           <p>You are kindly invited to join to the following meeting:</p>
@@ -44,10 +45,10 @@
           <p>Location:{{meeting_meeting_location}}</p>
           <p>Displayed in:{{meeting_meeting_timezone}}</p>
           <ul>
-            <li>Start:{{meeting_meeting_date}} - {{meeting_meeting_time_start}} {{meeting_meeting_timezone}}</li>
-            <li>End:{{meeting_meeting_date_end}} - {{meeting_meeting_time_stop}} {{meeting_meeting_timezone}}</li>
+            <li>Start: {{meeting_meeting_date}} - {{meeting_meeting_time_start}} {{meeting_meeting_timezone}}</li>
+            <li>End: {{meeting_meeting_date_end}} - {{meeting_meeting_time_stop}} {{meeting_meeting_timezone}}</li>
           </ul>
-          <p>This meeting is organized by{{organizedBy}}</p>
+          <p>This meeting is organized by {{organizedBy}}</p>
         </section>
       </div>
     </script>

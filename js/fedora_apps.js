@@ -47,24 +47,33 @@ var init_nb_notification = function(id) {
 }
 
 function find_difference(newEntries, oldEntries) {
-  if (typeof(oldEntries) === 'undefined') {
+  console.log("Find difference");
+  if (typeof(oldEntries) === 'undefined' || oldEntries == null) {
     return newEntries.length;
   }
-  
-  // TODO
-  // find number of different entries
-  return 1;
+
+  // find number of new entries that are really new compared to cached entries
+  var numDiff = 0;
+  for (var i=0; i<newEntries.length; i++) {
+    var entryFound = 0;
+    for (var j=0; j<oldEntries.length; j++) {
+      if (newEntries[i].msg_id != oldEntries[j].msg_id) {
+        entryFound = 1;
+        break;
+      }
+    }
+    numDiff += entryFound;
+  }
+  return numDiff;
 }
 
-function update_notification(category, nb_notification) {
-  var notify_counter = 0;
+function update_notification(category, nb_new_notification) {
   nb_notification_from_storage = parseInt(localStorage.getItem('notify_counter_' + category) ? localStorage.getItem('notify_counter_' + category) : 0);
-  if (nb_notification_from_storage >= rows_per_page){
-    notify_counter = rows_per_page;
-  } else {
-    notify_counter = nb_notification_from_storage + nb_notification;
-  }
-  localStorage.setItem('notify_counter_' + category, notify_counter);
+  localStorage.setItem('notify_counter_' + category, nb_notification_from_storage + nb_new_notification);
+
+  var notify_counter = nb_notification_from_storage + nb_new_notification;
+  if (notify_counter > rows_per_page) notify_counter = rows_per_page;
+  
   if (notify_counter > 0) {
     $("#home_" + category + ">[class='nb_notification']").css('display', 'inline');
     $("#home_" + category + ">[class='nb_notification']>text").html(notify_counter);
