@@ -37,17 +37,14 @@ var hostname = (function () {
 })();
 
 var init_nb_notification = function(id) {
-  var res = 0;
-  res = (id == -1 || id == "planet") ? localStorage.setItem('notify_counter__planet', 0) : 1;
-  res = (id == -1 || id == "updates") ? localStorage.setItem('notify_counter_updates', 0) : 2;
-  res = (id == -1 || id == "packages") ? localStorage.setItem('notify_counter_packages', 0) : 3;
-  res = (id == -1 || id == "builds") ? localStorage.setItem('notify_counter_builds', 0) : 4;
-  res = (id == -1 || id == "meetings") ? localStorage.setItem('notify_counter_meetings', 0) : 5;
-  return res;
+  if (id == -1 || id == "planet") localStorage.setItem('notify_counter_planet', 0);
+  if (id == -1 || id == "updates") localStorage.setItem('notify_counter_updates', 0);
+  if (id == -1 || id == "packages") localStorage.setItem('notify_counter_packages', 0);
+  if (id == -1 || id == "builds") localStorage.setItem('notify_counter_builds', 0);
+  if (id == -1 || id == "meetings") localStorage.setItem('notify_counter_meetings', 0);
 }
 
 function find_difference(newEntries, oldEntries) {
-  console.log("Find difference");
   if (typeof(oldEntries) === 'undefined' || oldEntries == null) {
     return newEntries.length;
   }
@@ -68,7 +65,8 @@ function find_difference(newEntries, oldEntries) {
 }
 
 function update_notification(category, nb_new_notification) {
-  nb_notification_from_storage = parseInt(localStorage.getItem('notify_counter_' + category) ? localStorage.getItem('notify_counter_' + category) : 0);
+  nb_notification_from_storage = parseInt(localStorage.getItem('notify_counter_' + category)) ? parseInt(localStorage.getItem('notify_counter_' + category)) : 0;
+
   localStorage.setItem('notify_counter_' + category, nb_notification_from_storage + nb_new_notification);
 
   var notify_counter = nb_notification_from_storage + nb_new_notification;
@@ -194,15 +192,17 @@ function update_fedmsg(id, category, deploy) {
     
     // Get cached entries to compare with new list of entries
     cachedEntries = localStorage.getItem(id);
-    var nb_notification = find_difference(entries, cachedEntries);
-    
+    var nb_notification = 0;
+    if (id == 'planet' || id == 'meetings') {
+	nb_notification = find_difference(entries, cachedEntries);
+    }
     localStorage.setItem(id, JSON.stringify(entries));
     if (deploy == true) {
       load_fedmsg_entries(entries, id);
       $("#message_" + id).text('');
     } else {
       // Add counter of notification by category on the home page
-      update_notification(id, nb_notification);
+      if (nb_notification != 0) update_notification(id, nb_notification);
     }
   });
 
