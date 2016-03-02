@@ -84,7 +84,18 @@ function update_notification(category, nb_new_notification) {
 var get_fedmsg_msg = function(category, callback) {
   $.ajax({
     url: "https://apps.fedoraproject.org/datagrepper/raw/",
-    data: 'delta=360000&rows_per_page='+rows_per_page+'&order=desc&meta=link&meta=subtitle&category=' + category,
+    //data: 'delta=360000&rows_per_page='+rows_per_page+'&order=desc&meta=link&meta=subtitle&category=' + category,
+    data: {
+      arguments: {
+        categories: [category],
+        not_users: []
+      },
+      meta: 'link', 
+      meta : 'subtitle',
+      delta: 360000,
+      rows_per_page : rows_per_page,
+      order: 'desc'
+    },
     dataType: "jsonp",
     success: function(data) {callback(data, category);},
     error: function(data, statusCode) {

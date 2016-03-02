@@ -167,6 +167,8 @@
             } else if (page_id == 'meetings_page') {
                 // console.log('load meetings');
                 load_fedmsg('meetings', 'fedocal');
+            } else if (page_id == 'config_page') {
+                // nothing to do
             }
         });
 
@@ -215,6 +217,9 @@
                     <circle cx="9" cy="9" r="9" style="stroke:#0000ff; fill:#ffffff"/>
                     <text x="9" y="13" style="text-anchor: middle" style="fill: #ffffff; stroke: #ffffff; font-size: 10px;"></text>
                 </svg>
+            </a>
+            <a id="home_config" href="#config_page" class="menu-item ui-block-b">
+                <img src="img/settings.png" alt="Configuration" />
             </a>
             <a data-role="button" data-theme="c" data-icon="refresh" href='#' id='refresh_all'>Refresh all</a>
             <a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
@@ -294,5 +299,30 @@
         </div><!-- /content -->
     </section>
 
+    <section id="config_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <h1>Configuration</h1>
+        </div><!-- /header -->
+
+        <div data-role="content">
+            <div class="ui-corner-all custom-corners">
+                <div class="ui-bar ui-bar-a">
+                    <h3>Notification</h3>
+                </div>
+                <div class="ui-body ui-body-a">
+                    <p>Content</p>
+                </div>
+            </div> 
+            <div class="ui-corner-all custom-corners">
+                <div class="ui-bar ui-bar-a">
+                    <h3>Planet</h3>
+                </div>
+                <div class="ui-body ui-body-a">
+                    <p>Content</p>
+                </div>
+            </div> 
+        </div><!-- /content -->
+    </section>
 </body>
 </html>
