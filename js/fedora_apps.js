@@ -26,7 +26,12 @@
  ***********************************************************************/
 
 var socket = null;
-var rows_per_page = 20;
+if (!localStorage.getItem('config.rows_per_page')) {
+  localStorage.setItem('config.rows_per_page', 20);
+}
+var rows_per_page = localStorage.getItem('config.rows_per_page');
+
+var notification_enable =  localStorage.getItem('config.notification') ? localStorage.getItem('config.notification') : 0;
 
 var hostname = (function () {
   var a = document.createElement('a');
@@ -82,20 +87,24 @@ function update_notification(category, nb_new_notification) {
 }
 
 var get_fedmsg_msg = function(category, callback) {
+  // prepare GET data according to user's configurations
+  var dataForDatagrepper = 'delta=360000&rows_per_page='+rows_per_page+'&order=desc&meta=link&meta=subtitle&category=' + category;
+  if (localStorage.getItem('config.not_users') != '') {
+    var notUsersList = [];
+    if (localStorage.getItem('config.not_users')) {
+      notUsersList = localStorage.getItem('config.not_users').split(',');
+    }
+    console.log(notUsersList);
+    for (var i=0; i<notUsersList.length; i++) {
+      dataForDatagrepper += '&not_user=' + notUsersList[i];
+    }
+  }
+  
+  // request datagrepper with prepared data
   $.ajax({
     url: "https://apps.fedoraproject.org/datagrepper/raw/",
-    //data: 'delta=360000&rows_per_page='+rows_per_page+'&order=desc&meta=link&meta=subtitle&category=' + category,
-    data: {
-      arguments: {
-        categories: [category],
-        not_users: []
-      },
-      meta: 'link', 
-      meta : 'subtitle',
-      delta: 360000,
-      rows_per_page : rows_per_page,
-      order: 'desc'
-    },
+    data: dataForDatagrepper,
+    jsonp: "callback",
     dataType: "jsonp",
     success: function(data) {callback(data, category);},
     error: function(data, statusCode) {
@@ -112,7 +121,9 @@ function parse_fedmsg(entry, id) {
   var date = new Date(entry.timestamp * 1000).toLocaleString();
   switch(id) {
     case 'planet':
+      //console.log(entry);
       content = {
+        entry_msg_post_author: entry.msg.username,
         entry_msg_name: entry.msg.name,
         entry_msg_post_title: entry.msg.post.title,
         entry_meta_link: entry.meta.link,
@@ -191,21 +202,23 @@ function update_fedmsg(id, category, deploy) {
   }
 
   $("#content_" + id).html('');
-
+  if (category == 'planet') {
   get_fedmsg_msg(category, function(data, category) {
 
     if (!data || data.total == 0) {
       $("#message_" + id).text('Could not retrieve information from fedmsg');
       return;
     }
-    
     var entries = data.raw_messages;
     
     // Get cached entries to compare with new list of entries
     cachedEntries = localStorage.getItem(id);
     var nb_notification = 0;
-    if (id == 'planet' || id == 'meetings') {
-	nb_notification = find_difference(entries, cachedEntries);
+    
+    if (notification_enable == 1) {
+      if (id == 'planet' || id == 'meetings') {
+        nb_notification = find_difference(entries, cachedEntries);
+      }
     }
     localStorage.setItem(id, JSON.stringify(entries));
     if (deploy == true) {
@@ -213,10 +226,12 @@ function update_fedmsg(id, category, deploy) {
       $("#message_" + id).text('');
     } else {
       // Add counter of notification by category on the home page
-      if (nb_notification != 0) update_notification(id, nb_notification);
+      if (notification_enable == 1) {
+        if (nb_notification != 0) update_notification(id, nb_notification);
+      }
     }
   });
-
+  }
   // If for some reason we got disconnected from our
   // websocket, it should have set itself to null.  If
   // that happened, let's try reconnecting.
@@ -274,4 +289,9 @@ function setup_websocket_listener() {
     // get the fedmsg.meta information.
     update_fedmsg(id_lookup[category], category, deploy);
   };
+}
+
+function save_config () {
+  localStorage.setItem('config.notification', $('input[name="config_notification"]').filter(':checked').val());
+  localStorage.setItem('config.not_users', $('input[name="config_not_users"]').val());
 }
