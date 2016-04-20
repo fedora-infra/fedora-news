@@ -31,7 +31,10 @@ if (!localStorage.getItem('config.rows_per_page')) {
 }
 var rows_per_page = localStorage.getItem('config.rows_per_page');
 
-var notification_enable =  localStorage.getItem('config.notification') ? localStorage.getItem('config.notification') : 0;
+if (localStorage.getItem('config.notification') === null) {
+  localStorage.setItem('config.notification', 1);
+}
+var notification_enable = localStorage.getItem('config.notification');
 
 var hostname = (function () {
   var a = document.createElement('a');
