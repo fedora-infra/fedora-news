@@ -52,3 +52,14 @@ body, .ui-overlay-c {
     width: 120px;
     display: inline-block;
 }
+a {
+	text-decoration: none;
+}
+.nb_notification {
+	display: none;
+    color:#ffffff;
+    font-weight:normal;
+}
+text {
+	font-size: 10px;
+}
