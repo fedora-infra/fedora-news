@@ -97,12 +97,10 @@ var get_fedmsg_msg = function(category, callback) {
     if (localStorage.getItem('config.not_users')) {
       notUsersList = localStorage.getItem('config.not_users').split(',');
     }
-    console.log(notUsersList);
     for (var i=0; i<notUsersList.length; i++) {
       dataForDatagrepper += '&not_user=' + notUsersList[i];
     }
   }
-  
   // request datagrepper with prepared data
   $.ajax({
     url: "https://apps.fedoraproject.org/datagrepper/raw/",
@@ -124,7 +122,6 @@ function parse_fedmsg(entry, id) {
   var date = new Date(entry.timestamp * 1000).toLocaleString();
   switch(id) {
     case 'planet':
-      //console.log(entry);
       content = {
         entry_msg_post_author: entry.msg.username,
         entry_msg_name: entry.msg.name,
@@ -148,6 +145,7 @@ function parse_fedmsg(entry, id) {
         entry_meta_link: entry.meta.link,
         calendar_calendar_name: calendar.calendar_name,
         entry_meta_subtitle: entry.meta.subtitle,
+        meeting_meeting_information: meeting.meeting_information,
         meeting_meeting_location: meeting.meeting_location,
         meeting_meeting_timezone: meeting.meeting_timezone,
         meeting_meeting_date: meeting.meeting_date,
@@ -205,7 +203,6 @@ function update_fedmsg(id, category, deploy) {
   }
 
   $("#content_" + id).html('');
-  if (category == 'planet') {
   get_fedmsg_msg(category, function(data, category) {
 
     if (!data || data.total == 0) {
@@ -234,7 +231,6 @@ function update_fedmsg(id, category, deploy) {
       }
     }
   });
-  }
   // If for some reason we got disconnected from our
   // websocket, it should have set itself to null.  If
   // that happened, let's try reconnecting.

@@ -35,11 +35,13 @@
         <a data-role="button" data-theme="c" data-icon="grid" href="{{entry_meta_link}}">Source</a><br />
         <section>
           <header>
-            <h2><a href="https://apps.fedoraproject.org/calendar/{{calendar_calendar_name}}/" target="_blank">{{calendar_calendar_name}}</a></h2>
-            <p>{{entry_msg_meeting_meeting_name}} details below</p>
+            <h2>{{entry_msg_meeting_name}}</h2>
+            <p>
+		<a href="//apps.fedoraproject.org/calendar/{{calendar_calendar_name}}/" target="_blank">{{entry_msg_meeting_meeting_name}}</a> details below
+	    </p>
           </header>
           <p>You are kindly invited to join to the following meeting:</p>
-          <h4>{{entry_meta_subtitle}}</h4>
+          <h4>{{meeting_meeting_information}}</h4>
           <p>Location:{{meeting_meeting_location}}</p>
           <p>Displayed in:{{meeting_meeting_timezone}}</p>
           <ul>
