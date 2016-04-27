@@ -4,6 +4,7 @@
     <title>Fedora news apps</title>
     <link rel="shortcut icon" type="image/vnd.microsoft.icon"
         href="//fedoraproject.org/static/images/favicon.ico" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="apple-touch-icon" href="img/Fedora.png"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/git/jquery.mobile-git.css" type="text/css">
@@ -12,6 +13,45 @@
         type="text/javascript"></script>
     <script src="http://code.jquery.com/mobile/git/jquery.mobile-git.js"
         type="text/javascript"></script>
+    <script src="js/handlebars.min.js" type="text/javascript"></script>
+    <script id="entry-default-template" type="text/x-handlebars-template>
+      <div class="entry-default">
+        <li>
+          <a href="{{entry_meta_link}}" target="_blank">{{entry_meta_subtitle}}({{date}})</a>
+        </li>
+      </div>
+    </script>
+    <script id="entry-planet-template" type="text/x-handlebars-template">
+       <div data-role="collapsible" class="entry-planet">
+        <h3>{{entry_msg_name}} : {{entry_msg_post_title}}</h3>
+        <a data-role="button" data-theme="c" data-icon="grid" href="{{entry_meta_link}}">Source</a> ({{entry_msg_post_author}})
+        <br />
+        {{{entry_msg_post_content}}}
+      </div>
+    </script>
+    <script id="entry-meeting-template" type="text/x-handlebars-template">
+      <div data-role="collapsible" class="entry_meeting">
+        <h3><span class="lbl">Calendar:</span>{{entry_msg_calendar_calendar_name}}<br/><span class="lbl">Meeting:</span>{{entry_msg_meeting_meeting_name}}</h3>
+        <a data-role="button" data-theme="c" data-icon="grid" href="{{entry_meta_link}}">Source</a><br />
+        <section>
+          <header>
+            <h2>{{entry_msg_meeting_name}}</h2>
+            <p>
+		<a href="//apps.fedoraproject.org/calendar/{{calendar_calendar_name}}/" target="_blank">{{entry_msg_meeting_meeting_name}}</a> details below
+	    </p>
+          </header>
+          <p>You are kindly invited to join to the following meeting:</p>
+          <h4>{{meeting_meeting_information}}</h4>
+          <p>Location:{{meeting_meeting_location}}</p>
+          <p>Displayed in:{{meeting_meeting_timezone}}</p>
+          <ul>
+            <li>Start: {{meeting_meeting_date}} - {{meeting_meeting_time_start}} {{meeting_meeting_timezone}}</li>
+            <li>End: {{meeting_meeting_date_end}} - {{meeting_meeting_time_stop}} {{meeting_meeting_timezone}}</li>
+          </ul>
+          <p>This meeting is organized by {{organizedBy}}</p>
+        </section>
+      </div>
+    </script>
     <script src="js/fedora_apps.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
@@ -46,7 +86,6 @@
                 $("#message_home").text('Cache refreshed');
             });
 
-
             /* Clear buttons */
             $('#clear_planet').bind("click", function () {
                 $("#content_planet").html('');
@@ -63,16 +102,15 @@
                 localStorage.setItem('packages', null);
                 $("#message_packages").text('Cache cleared');
             });
-            $('#clear_meetings').bind("click", function () {
-                $("#content_meetings").html('');
-                //localStorage.meeting_entries = null;
-                localStorage.setItem('meetings', null);
-                $("#message_meetings").text('Cache cleared');
-            });
             $('#clear_builds').bind("click", function () {
                 $("#content_builds").html('');
                 localStorage.setItem('builds', null);
                 $("#message_builds").text('Cache cleared');
+            });
+            $('#clear_meetings').bind("click", function () {
+                $("#content_meetings").html('');
+                localStorage.setItem('meetings', null);
+                $("#message_meetings").text('Cache cleared');
             });
 
             $('#clear_all').bind("click", function () {
@@ -82,7 +120,18 @@
                 localStorage.setItem('packages', null);
                 localStorage.setItem('builds', null);
                 localStorage.setItem('meetings', null);
+
+                init_nb_notification(-1);
                 $("#message_home").text('Cache clear');
+            });
+
+            $('.menu-item').each(function(index) {
+                var $this = $(this);
+                $this.bind("click", function () {
+                    var category = this.id.split('_')[1];
+                    init_nb_notification(category);
+                    update_notification(category ,0);
+                })
             });
 
             if (navigator.mozApps) {
@@ -118,6 +167,9 @@
             } else if (page_id == 'meetings_page') {
                 // console.log('load meetings');
                 load_fedmsg('meetings', 'fedocal');
+            } else if (page_id == 'config_page') {
+                $('input[name="config_notification"]').filter('[value='+localStorage.getItem('config.notification')+']').prop('checked', true).checkboxradio("refresh");
+                $('input[name="config_not_users"]').val(localStorage.getItem('config.not_users'));
             }
         });
 
@@ -132,20 +184,43 @@
         </div><!-- /header -->
         <div data-role="content">
             <p id="message_home"></p>
-            <a id="home_planet" href="#planet_page" class="ui-block-a">
+            <a id="home_planet" href="#planet_page" class="menu-item ui-block-a">
                 <img src="img/planet.png" alt="Fedora Planet" />
+                <svg class="nb_notification" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <circle cx="9" cy="9" r="9" style="stroke:#0000ff; fill:#ffffff"/>
+                    <text x="9" y="13" style="text-anchor: middle" style="fill: #ffffff; stroke: #ffffff; font-size: 10px;"></text>
+                </svg>
             </a>
-            <a id="home_builds" href="#packages_page" class="ui-block-b">
+            <a id="home_packages" href="#packages_page" class="menu-item ui-block-b">
                 <img src="img/packages.png" alt="Latest packages" />
+                <svg class="nb_notification" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <circle cx="9" cy="9" r="9" style="stroke:#0000ff; fill:#ffffff"/>
+                    <text x="9" y="13" style="text-anchor: middle" style="fill: #ffffff; stroke: #ffffff; font-size: 10px;"></text>
+                </svg>
             </a>
-            <a id="home_builds" href="#builds_page" class="ui-block-a">
+            <a id="home_builds" href="#builds_page" class="menu-item ui-block-a">
                 <img src="img/builds.png" alt="Latest builds" />
+                <svg class="nb_notification" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <circle cx="9" cy="9" r="9" style="stroke:#0000ff; fill:#ffffff"/>
+                    <text x="9" y="13" style="text-anchor: middle" style="fill: #ffffff; stroke: #ffffff; font-size: 10px;"></text>
+                </svg>
             </a>
-            <a id="home_updates" href="#updates_page" class="ui-block-b">
+            <a id="home_updates" href="#updates_page" class="menu-item ui-block-b">
                 <img src="img/updates.png" alt="Latest updates" />
+                <svg class="nb_notification" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <circle cx="9" cy="9" r="9" style="stroke:#0000ff; fill:#ffffff"/>
+                    <text x="9" y="13" style="text-anchor: middle" style="fill: #ffffff; stroke: #ffffff; font-size: 10px;"></text>
+                </svg>
             </a>
-            <a id="home_meetings" href="#meetings_page" class="ui-block-a">
+            <a id="home_meetings" href="#meetings_page" class="menu-item ui-block-a">
                 <img src="img/meetings.png" alt="Coming meetings" />
+                <svg class="nb_notification" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <circle cx="9" cy="9" r="9" style="stroke:#0000ff; fill:#ffffff"/>
+                    <text x="9" y="13" style="text-anchor: middle" style="fill: #ffffff; stroke: #ffffff; font-size: 10px;"></text>
+                </svg>
+            </a>
+            <a id="home_config" href="#config_page" class="menu-item ui-block-b">
+                <img src="img/settings.png" alt="Configuration" />
             </a>
             <a data-role="button" data-theme="c" data-icon="refresh" href='#' id='refresh_all'>Refresh all</a>
             <a data-role="button" data-theme="c" data-icon="delete" href='#' id='clear_all'>Clear all</a>
@@ -225,5 +300,33 @@
         </div><!-- /content -->
     </section>
 
+    <section id="config_page" data-role="page">
+        <div data-role="header">
+            <a data-role="button" data-theme="c" data-icon="arrow-l" class="home_button" href='#index_page'>Back</a>
+            <h1>Configuration</h1>
+        </div><!-- /header -->
+
+        <div data-role="content">
+            <div class="ui-corner-all custom-corners">
+                <div class="ui-bar ui-bar-a">
+                    <h3>Notification</h3>
+                </div>
+                <div class="ui-body ui-body-a">
+                  <input type="radio" id="config_notification_1" name="config_notification" value="1" /><label for="config_notification_1">Enable</label>
+                  <input type="radio" id="config_notification_0" name="config_notification" value="0" /><label for="config_notification_0">Disable</label>
+                </div>
+            </div> 
+            <div class="ui-corner-all custom-corners">
+                <div class="ui-bar ui-bar-a">
+                  <h3>Planet</h3>
+                </div>
+                <div class="ui-body ui-body-a">
+                  <label>Excluded authors (separated by ',') : </label>
+                  <input type="text" name="config_not_users" value="" />
+                </div>
+                <input type="button" value="Save" name="config_save" onclick="save_config();"/>
+            </div> 
+        </div><!-- /content -->
+    </section>
 </body>
 </html>
